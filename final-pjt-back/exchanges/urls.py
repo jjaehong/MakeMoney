@@ -4,5 +4,6 @@ from . import views
 # app_name = 'exchanges'
 urlpatterns = [
 
-    # path('',views.index),
+    path('',views.exchange_currency),
+    # path('')
 ]
