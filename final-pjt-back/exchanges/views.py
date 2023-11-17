@@ -18,5 +18,8 @@ def exchange_currency(request):
     
     exchange_url = f'https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?data=AP01&authkey={EXCHANGE_API_KEY}'
     response_data = requests.get(exchange_url).json()
+
+    
+
     return Response(response_data)
 
