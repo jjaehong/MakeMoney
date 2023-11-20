@@ -5,6 +5,7 @@ import Exchange from '@/mainviews/Exchange.vue'
 import Map from '@/mainviews/Map.vue'
 import Profile from '@/mainviews/Profile.vue'
 import Community from '@/mainviews/Community.vue'
+import ProductsDetail from '@/views/ProductsDetail.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,6 +40,11 @@ const router = createRouter({
       name: 'profile',
       component: Profile,
     },
+    {
+      path: '/products/:cd',
+      name: 'productsdetail',
+      component: ProductsDetail
+    }
 
   ]
 })

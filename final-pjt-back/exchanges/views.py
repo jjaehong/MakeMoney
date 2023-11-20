@@ -20,6 +20,5 @@ def exchange_currency(request):
     response_data = requests.get(exchange_url).json()
 
     
-
     return Response(response_data)
 

@@ -96,7 +96,7 @@ def save_savings_products(request):
     return JsonResponse({ 'message': 'okay' })
 
 
-# 전체 정기예금 상품 목록 출력 & 데이터 삽입
+# 전체 정기예적금 상품 목록 출력 & 데이터 삽입
 @api_view(['GET','POST'])
 def product_list(request):
     
