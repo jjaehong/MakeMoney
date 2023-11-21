@@ -6,7 +6,10 @@ import Map from '@/mainviews/Map.vue'
 import Profile from '@/mainviews/Profile.vue'
 import Community from '@/mainviews/Community.vue'
 import ProductsDetail from '@/views/ProductsDetail.vue'
-import test from '@/mainviews/test.vue'
+import DetailView from '@/views/DetailView.vue'
+import CreateView from '@/views/CreateView.vue'
+import SignUpView from '@/views/SignUpView.vue'
+import LogInView from '@/views/LogInView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -47,12 +50,38 @@ const router = createRouter({
       component: ProductsDetail
     },
     {
-      path: '/test',
-      name: 'test',
-      component: test
+      path: '/articles/:id',
+      name: 'DetailView',
+      component: DetailView
     },
-
+    {
+      path: '/create',
+      name: 'CreateView',
+      component: CreateView
+    },
+    {
+      path: '/signup',
+      name: 'SignUpView',
+      component: SignUpView
+    },
+    {
+      path: '/login',
+      name: 'LogInView',
+      component: LogInView
+    }
   ]
 })
+import { useCounterStore } from '@/stores/counter'
 
+router.beforeEach((to, from) => {
+  const store = useCounterStore()
+  if ((to.name !== 'home' && to.name !=='LogInView' && to.name !== 'SignUpView')  && !store.isLogin) {
+    window.alert('로그인이 필요합니다.')
+    return { name: 'LogInView' }
+  }
+  if ((to.name === 'SignUpView' || to.name === 'LogInView') && (store.isLogin)) {
+    window.alert('이미 로그인 했습니다.')
+    return { name: 'home' }
+  }
+})
 export default router

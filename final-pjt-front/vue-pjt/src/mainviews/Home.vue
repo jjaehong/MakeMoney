@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="store.isLogin">
         <h1>Home</h1>
         <div class="container"> 
                 <RouterLink :to="{name:'products'}" class="card" style="width: 18rem;">
@@ -40,12 +40,15 @@
                 </div>
             </div>     
         </div>
-
+    </div>
+    <div v-else>
+        로그인이 필요합니다.
     </div>
 </template>
 
 <script setup>
-
+import { useCounterStore } from '../stores/counter'
+const store = useCounterStore()
 </script>
 
 <style scoped>
