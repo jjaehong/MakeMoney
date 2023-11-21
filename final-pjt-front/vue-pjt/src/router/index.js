@@ -6,6 +6,7 @@ import Map from '@/mainviews/Map.vue'
 import Profile from '@/mainviews/Profile.vue'
 import Community from '@/mainviews/Community.vue'
 import ProductsDetail from '@/views/ProductsDetail.vue'
+import test from '@/mainviews/test.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,7 +45,12 @@ const router = createRouter({
       path: '/products/:cd',
       name: 'productsdetail',
       component: ProductsDetail
-    }
+    },
+    {
+      path: '/test',
+      name: 'test',
+      component: test
+    },
 
   ]
 })

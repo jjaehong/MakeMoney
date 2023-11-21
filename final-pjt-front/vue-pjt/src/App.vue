@@ -8,6 +8,7 @@
                 <RouterLink :to="{name : 'map'}">MAP</RouterLink> 
                 <RouterLink :to="{name : 'community'}">COMMUNITY</RouterLink> 
                 <RouterLink :to="{name : 'profile'}">PROFILE</RouterLink> 
+                <RouterLink :to="{name : 'test'}">TEST</RouterLink> 
                 <!-- <RouterLink :to="{name : 'stock'}">STOCK</RouterLink>  -->
                 
             </nav>
