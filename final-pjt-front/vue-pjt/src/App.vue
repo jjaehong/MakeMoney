@@ -11,7 +11,7 @@
               <RouterLink :to="{name : 'profile'}">PROFILE</RouterLink> 
               <!-- <RouterLink :to="{name : 'stock'}">STOCK</RouterLink>  -->
               <form @submit.prevent="store.logOut">
-                <input type="submit" value="logOut">
+                <input type="submit" value="LogOut">
               </form>
             </nav>
           </div>
@@ -21,7 +21,6 @@
               </nav>
         </header>
         <RouterView/>
-        
     </div>
 </template>
 
