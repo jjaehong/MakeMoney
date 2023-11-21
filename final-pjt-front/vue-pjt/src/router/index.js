@@ -10,6 +10,10 @@ import DetailView from '@/views/DetailView.vue'
 import CreateView from '@/views/CreateView.vue'
 import SignUpView from '@/views/SignUpView.vue'
 import LogInView from '@/views/LogInView.vue'
+import UpdateView from '@/views/UpdateView.vue'
+
+
+import test from '@/mainviews/test.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -68,6 +72,17 @@ const router = createRouter({
       path: '/login',
       name: 'LogInView',
       component: LogInView
+    },
+    {
+      path:'/update/:id',
+      name:'UpdateView',
+      component: UpdateView
+    },
+
+    {
+      path: '/test',
+      name: 'test',
+      component: test
     }
   ]
 })
