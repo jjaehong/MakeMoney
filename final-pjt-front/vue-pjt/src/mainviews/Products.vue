@@ -12,7 +12,6 @@
                 </form>
             </div>
             <div class="col" style="margin-left: 5px;">
-
                 <button @click="dep">정기예금</button>
                 <button @click="sav">정기적금</button>
                 <div v-if="bank_name=='전체' && select==true" v-for="deposit in store.deposit" style="display: block;">

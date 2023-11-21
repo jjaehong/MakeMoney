@@ -52,11 +52,6 @@ def article_detail(request, article_pk):
             return Response(serializer.data)
         # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-
-
-
-
 @api_view(['GET'])
 def comment_list(request):
     # comments = Comment.objects.all()

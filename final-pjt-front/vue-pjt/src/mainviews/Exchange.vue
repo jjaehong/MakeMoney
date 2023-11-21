@@ -19,7 +19,6 @@
             <input type="text" v-model=exchange2 @input="ec" id="amount-two" class="form-control">
         </div>
         <div>*엔화, 인도네시아 루피아는 100 단위, 나머지는 모두 1단위</div>
-
     </div>
 </div>
 </template>
@@ -47,7 +46,6 @@ const ec = function(){
     }
     exchange2.value = parseFloat((exchange1.value * store.exchange.filter((element) => element.cur_nm==country1.value)[0].deal_bas_r.replace(',', '') / store.exchange.filter((element) => element.cur_nm==country2.value)[0].deal_bas_r.replace(',', '')).toFixed(3))
 }
-
 
 </script>
 
