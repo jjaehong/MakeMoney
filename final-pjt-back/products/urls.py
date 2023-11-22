@@ -32,7 +32,5 @@ urlpatterns = [
     # 특정 개인신용대출 상품의 옵션 리스트 출력
     path('credit-loan-options/<str:credit_loan>/', views.credit_loan_options),
 
-
-    
 ]
 

@@ -11,6 +11,19 @@
       <p>수정일 : {{ article.updated_at }}</p>
       <button @click="deleteArticle()">삭제</button>
     </div>
+    <hr>
+    <h4>댓글 작성란</h4>
+    <form @submit="createComment">
+      <input type="text" v-model="content">
+      <input type="submit" value="댓글 작성">
+    </form>
+
+
+    <!-- <div v-if="comment">
+    
+    
+    </div> -->
+
   </div>
 </template>
 
@@ -29,8 +42,8 @@ const store = useCounterStore()
 const route = useRoute()
 const router = useRouter()
 const article = ref(null)
-
-
+const content = ref(null)
+console.log(route.params)
 onMounted(() => {
   axios({
     method: 'get',
@@ -47,6 +60,7 @@ onMounted(() => {
 })
 
 
+
 const deleteArticle = function() {
   axios({
     method:'delete',
@@ -59,6 +73,26 @@ const deleteArticle = function() {
   .catch((err) => {
     console.log(err)
   })
+}
+
+const createComment = function(event) {
+  event.preventDefault()
+  axios({
+    method:'post',
+    url:`${store.API_URL}/api/v1/articles/${route.params.id}/comments/`,
+    data:{
+      content:content.value
+    },
+    headers: {
+      Authorization: `Token ${store.token}`
+    },
+    })
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 }
 
 
