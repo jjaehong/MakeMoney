@@ -8,9 +8,9 @@
       </div>
       <div>
         <label for="content">내용:</label>
-        <textarea v-model.trim="content" id="content"></textarea>
+        <textarea v-model.trim="content" id="content" cols="30" rows="10"></textarea>
       </div>
-      <input type="submit">
+      <input type="submit" value="작성">
     </form>
   </div>
 </template>
@@ -19,12 +19,13 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import { useCounterStore } from '@/stores/counter'
-import { useRouter } from 'vue-router'
+import { useRouter,useRoute } from 'vue-router'
 
 const title = ref(null)
 const content = ref(null)
 const store = useCounterStore()
 const router = useRouter()
+const route = useRoute()
 
 const createArticle = function () {
   axios({
@@ -40,7 +41,8 @@ const createArticle = function () {
   })
     .then((res) => {
       // console.log(res)
-      router.push({ name: 'ArticleView' })
+      console.log(route)
+      router.push({ name: 'community'})
     })
     .catch((err) => {
       console.log(err)
