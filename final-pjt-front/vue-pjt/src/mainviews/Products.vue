@@ -20,10 +20,41 @@
           <div class="col-md-9">
             <button @click="dep" class="btn btn-secondary">정기예금</button>
             <button @click="sav" class="btn btn-secondary">정기적금</button>
+            <div class="row d-flex">
+                <div class="col-1">공시 제출월</div>
+                <div class="vr p-0"></div>
+                <div class="col-2">금융회사명</div>
+                <div class="vr p-0"></div>
+                <div class="col-3">상품명</div>
+                <div class="vr p-0"></div>
+                <div class="col-1">6개월</div>
+                <div class="vr p-0"></div>
+                <div class="col-1">12개월</div>
+                <div class="vr p-0"></div>
+                <div class="col-1">24개월</div>
+                <div class="vr p-0"></div>
+                <div class="col-1">36개월</div>
+                <div class="vr p-0"></div>
+            </div>
                 <div v-if="bank_name=='전체' && select==true && store.deposit.length > 0" v-for="deposit in store.deposit" style="display: block;">
-                    <div @click="goDetail(deposit)">{{ deposit.dcls_month }}  {{ deposit.kor_co_nm }}  {{ deposit.fin_prdt_nm }} {{ deposit.month6 }} {{ deposit.month12 }} {{ deposit.month24 }} {{ deposit.month36 }}</div>
-                    <button class="btn btn-primary" @click="save(deposit)" v-if="!data_str.includes(deposit.fin_prdt_cd) && store.deposit.length > 0">저장</button>
-                    <button class="btn btn-primary" @click="del(deposit)" v-else>삭제</button>
+                    <div @click="goDetail(deposit)" class="row d-flex">
+                        <div class="col-1">{{ deposit.dcls_month }}</div>
+                        <div class="vr p-0"></div>  
+                        <div class="col-2">{{ deposit.kor_co_nm }}</div>
+                        <div class="vr p-0"></div>
+                        <div class="col-3">{{ deposit.fin_prdt_nm }}</div>
+                        <div class="vr p-0"></div>
+                        <div class="col-1">{{ deposit.month6 }}</div>
+                        <div class="vr p-0"></div>
+                        <div class="col-1">{{ deposit.month12 }}</div>
+                        <div class="vr p-0"></div>
+                        <div class="col-1">{{ deposit.month24 }}</div>
+                        <div class="vr p-0"></div>
+                        <div class="col-1">{{ deposit.month36 }}</div>
+                        <div class="vr p-0"></div>
+                        <button class="btn btn-primary col-1" @click="save(deposit)" v-if="!data_str.includes(deposit.fin_prdt_cd) && store.deposit.length > 0">저장</button>
+                        <button class="btn btn-primary col-1" @click="del(deposit)" v-else>삭제</button>
+                    </div>
                 </div>
                 <div v-if="bank_name=='전체' && select==false && store.savings.length > 0" v-for="savings in store.savings" style="display: block;">
                     <div @click="goDetail(savings)">{{ savings.dcls_month }}  {{ savings.kor_co_nm }}  {{ savings.fin_prdt_nm }} {{ savings.month6 }} {{ savings.month12 }} {{ savings.month24 }} {{ savings.month36 }}</div>
