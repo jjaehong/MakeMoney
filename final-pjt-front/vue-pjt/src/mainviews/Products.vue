@@ -1,55 +1,58 @@
 <template>
-    <h1>금융 상품 이력</h1>
-    <div class="container">
+    <div class="financial-products">
+      <h1 class="mt-4">금융 상품 이력</h1>
+      <div class="container mt-4">
         <div class="row">
-            <div class="col-3 gx-5">
-                <form @submit.prevent="check">
-                    <select name="bank">
-                        <option v-for="bank in store.bank" name="bank" :value=bank>{{ bank }}</option>
-                    </select>
-                    <hr>
-                    <select name="days">
-                        <option v-for="day in days" :value=day name="days">{{ day }}</option>
-                    </select>
-                    <button>확인</button>
-                </form>
-            </div>
-            <div class="col" style="margin-left: 5px;">
-                <button @click="dep">정기예금</button>
-                <button @click="sav">정기적금</button>
-                <div v-if="bank_name=='전체' && select==true" v-for="deposit in store.deposit" style="display: block;">
+          <div class="col-md-3">
+            <form @submit.prevent="check" class="mb-3">
+              <label for="bank" class="form-label">은행 선택</label>
+              <select name="bank" class="form-select" id="bank">
+                <option v-for="bank in store.bank" :key="bank" :value="bank">{{ bank }}</option>
+              </select>
+              <hr class="my-3">
+              <label for="days" class="form-label">기간 선택</label>
+              <select name="days" class="form-select" id="days">
+                <option v-for="day in days" :key="day" :value="day">{{ day }}</option>
+              </select>
+              <button class="btn btn-primary mt-3">확인</button>
+            </form>
+          </div>
+          <div class="col-md-9">
+            <button @click="dep" class="btn btn-secondary">정기예금</button>
+            <button @click="sav" class="btn btn-secondary">정기적금</button>
+                <div v-if="bank_name=='전체' && select==true && store.deposit.length > 0" v-for="deposit in store.deposit" style="display: block;">
                     <div @click="goDetail(deposit)">{{ deposit.dcls_month }}  {{ deposit.kor_co_nm }}  {{ deposit.fin_prdt_nm }} {{ deposit.month6 }} {{ deposit.month12 }} {{ deposit.month24 }} {{ deposit.month36 }}</div>
-                    <button class="btn btn-primary" @click="save(deposit)" v-if="!data_str.includes(deposit.fin_prdt_cd)">저장</button>
+                    <button class="btn btn-primary" @click="save(deposit)" v-if="!data_str.includes(deposit.fin_prdt_cd) && store.deposit.length > 0">저장</button>
                     <button class="btn btn-primary" @click="del(deposit)" v-else>삭제</button>
                 </div>
-                <div v-if="bank_name=='전체' && select==false" v-for="savings in store.savings" style="display: block;">
+                <div v-if="bank_name=='전체' && select==false && store.savings.length > 0" v-for="savings in store.savings" style="display: block;">
                     <div @click="goDetail(savings)">{{ savings.dcls_month }}  {{ savings.kor_co_nm }}  {{ savings.fin_prdt_nm }} {{ savings.month6 }} {{ savings.month12 }} {{ savings.month24 }} {{ savings.month36 }}</div>
-                    <button class="btn btn-primary" @click="save(savings)" v-if="!data_str.includes(savings.fin_prdt_cd)">저장</button>
+                    <button class="btn btn-primary" @click="save(savings)" v-if="!data_str.includes(savings.fin_prdt_cd) && store.deposit.length > 0">저장</button>
                     <button class="btn btn-primary" @click="del(savings)" v-else>삭제</button>
-
                 </div>
-                <div v-if="bank_name!='전체' && select==true" v-for="deposit in store.deposit">
-                    <div v-if="deposit.kor_co_nm==bank_name" @click="goDetail(deposit)">{{ deposit.dcls_month }}  {{ deposit.kor_co_nm }}  {{ deposit.fin_prdt_nm }} 
+                <div v-if="bank_name!='전체' && select==true && store.deposit.length > 0" v-for="deposit in store.deposit">
+                    <div v-if="deposit.kor_co_nm==bank_name && store.deposit.length > 0" @click="goDetail(deposit)">{{ deposit.dcls_month }}  {{ deposit.kor_co_nm }}  {{ deposit.fin_prdt_nm }} 
                         <div v-if="day==6">{{ deposit.month6 }}</div>
                         <div v-if="day==12">{{ deposit.month6 }} {{ deposit.month12 }}</div>
                         <div v-if="day==24">{{ deposit.month6 }} {{ deposit.month12 }} {{ deposit.month24 }}</div>
                         <div v-if="day==36">{{ deposit.month6 }} {{ deposit.month12 }} {{ deposit.month24 }} {{ deposit.month36 }}</div>
-                        <button class="btn btn-primary" @click="save(deposit)" v-if="!data_str.includes(deposit.fin_prdt_cd)">저장</button>
+                        <button class="btn btn-primary" @click="save(deposit)" v-if="!data_str.includes(deposit.fin_prdt_cd) && store.deposit.length > 0">저장</button>
                         <button class="btn btn-primary" @click="del(deposit)" v-else>삭제</button>
                     </div>
                 </div>
-                <div v-if="bank_name!='전체' && select==false" v-for="savings in store.savings">
-                    <div v-if="savings.kor_co_nm==bank_name" @click="goDetail(savings)">{{ savings.dcls_month }}  {{ savings.kor_co_nm }}  {{ savings.fin_prdt_nm }}
+                <div v-if="bank_name!='전체' && select==false && store.savings.length > 0" v-for="savings in store.savings">
+                    <div v-if="savings.kor_co_nm==bank_name && store.savings.length > 0" @click="goDetail(savings)">{{ savings.dcls_month }}  {{ savings.kor_co_nm }}  {{ savings.fin_prdt_nm }}
                         <div v-if="day==6">{{ savings.month6 }}</div>
                         <div v-if="day==12">{{ savings.month6 }} {{ savings.month12 }}</div>
                         <div v-if="day==24">{{ savings.month6 }} {{ savings.month12 }} {{ savings.month24 }}</div>
                         <div v-if="day==36">{{ savings.month6 }} {{ savings.month12 }} {{ savings.month24 }} {{ savings.month36 }}</div>
-                        <button class="btn btn-primary" @click="save(savings)" v-if="!data_str.includes(savings.fin_prdt_cd)">저장</button>
+                        <button class="btn btn-primary" @click="save(savings)" v-if="!data_str.includes(savings.fin_prdt_cd) && store.deposit.length > 0">저장</button>
                     <button class="btn btn-primary" @click="del(savings)" v-else>삭제</button>
-                    </div>
+                </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </template>
 
@@ -64,7 +67,7 @@ const select = ref(false)
 const router = useRouter()
 const days = ref(['전체', 6, 12, 24, 36])
 const day = ref('')
-const data = ref([])
+const data = ref('')
 const data_str = ref([])
 const API_URL = 'http://127.0.0.1:8000'
 onMounted(() => { 
@@ -95,7 +98,9 @@ onMounted(() => {
         .catch((err) => console.log(err))
     })
     data.value = store.UserDetail.financial_products
-    data_str.value = data.value.split(',')
+    if(!data.value==''){
+        data_str.value = data.value.split(',')
+    }
  })
 const dep = function() {
     select.value = true
@@ -136,7 +141,7 @@ const save = function(object) {
 const del = function(object){
     data_str.value = data_str.value.filter((element) => element != object.fin_prdt_cd)
     data.value = data_str.value.join(',')
-    
+    console.log(data.value)
     axios({
         method: 'post',
         url: `${API_URL}/accounts/update/${store.UserDetail.id}/`,
@@ -154,5 +159,50 @@ const del = function(object){
 </script>
 
 <style scoped>
+.financial-products {
+  padding: 20px;
+}
 
+.pointer {
+  cursor: pointer;
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.btn-secondary {
+  margin-right: 10px;
+}
+
+.savings-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.savings-item {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+.savings-details {
+  cursor: pointer;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.btn-primary {
+  margin-top: 5px;
+}
 </style>

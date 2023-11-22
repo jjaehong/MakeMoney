@@ -33,7 +33,7 @@
             <div v-else>loan : 값을 넣어주세요.</div>
     
         </div>
-            <div v-for="product in store.total">
+            <div v-if="store.UserDetail.username" v-for="product in store.total">
                 <div v-if="data_str.includes(product.fin_prdt_cd)">
                     Financial_products
                     <div>공시 제출월 {{ product.dcls_month }}</div>
@@ -42,7 +42,7 @@
                     <div>가입제한 {{ product.join_deny }}</div>
                     <div>가입 방법 {{ product.join_way }}</div>
                     <div>우대조건 {{ product.spcl_cnd }}</div>
-                    <button @click="del(product)" class="btn btn-primary">상품 삭제</button>
+                    <button @click="del(product.fin_prdt_cd)" class="btn btn-primary">상품 삭제</button>
                 </div>
             </div>
         </div>
@@ -53,10 +53,11 @@ import { onMounted, ref } from 'vue'
 import { useCounterStore } from '../stores/counter'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
-
+const data = ref('')
 const router = useRouter()
 const store = useCounterStore()
 const data_str = ref([])
+const API_URL = 'http://127.0.0.1:8000'
 onMounted(() => {
     store.getUserDetail()
     store.getdeposit()
@@ -73,14 +74,22 @@ const goprofile = function(UserDetail){
 }
 
 const del = function(object){
-    const financialProducts = store.UserDetail.financial_products || []
 
-    const index = financialProducts.indexOf(object);
-
-    if (index !== -1) {
-        financialProducts.splice(index, 1);
-    }
-    console.log(store.UserDetail.financial_products)
+    data_str.value = data_str.value.filter((element) => element != object)
+    data.value = data_str.value.join(',')
+    axios({
+        method: 'post',
+        url: `${API_URL}/accounts/update/${store.UserDetail.id}/`,
+        data: {
+            financial_products:data.value
+        }
+    })
+    .then((res) => {
+        console.log(res.data)
+    })
+    .catch((err) => {
+        console.log(err)
+    })
 }
 </script>
 
