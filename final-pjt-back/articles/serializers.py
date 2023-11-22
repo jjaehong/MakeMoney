@@ -1,5 +1,11 @@
 from rest_framework import serializers
 from .models import Article, Comment
+from accounts.models import User
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
 
 
 class ArticleListSerializer(serializers.ModelSerializer):
@@ -12,10 +18,11 @@ class CommentSerializer(serializers.ModelSerializer):
     class ArticleSerializer(serializers.ModelSerializer):
         class Meta:
             model = Article
-            fields = ('title',)
+            fields = ('id', 'title','user')
 
     # override
     article = ArticleSerializer(read_only=True)
+    user = UserSerializer(source='article.user', read_only=True)
 
     class Meta:
         model = Comment

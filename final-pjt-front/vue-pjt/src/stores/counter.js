@@ -6,6 +6,7 @@ import axios from 'axios'
 export const useCounterStore = defineStore('counter', () => {
   const router = useRouter()
   const articles = ref([])
+  const comments = ref([])
   const token = ref(null)
   const deposit = ref([])
   const bank = ref(['전체'])
@@ -77,6 +78,23 @@ export const useCounterStore = defineStore('counter', () => {
       .then((res) =>{
         // console.log(res)
         articles.value = res.data
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  const getComments = function () {
+    axios({
+      method:'get',
+      url:`${API_URL}/api/v1/articles/comments/`,
+      headers: {
+        Authorization: `Token ${token.value}`
+      }
+    })
+      .then((res) => {
+        console.log(res)
+        comments.value = res.data
       })
       .catch((err) => {
         console.log(err)
@@ -156,5 +174,5 @@ export const useCounterStore = defineStore('counter', () => {
 
 
   return { deposit, API_URL, getdeposit, bank, savings, total, getexchange, country, exchange, 
-    articles, getArticles, signUp, logIn, token, isLogin, logOut, getUserDetail, UserDetail }
+    articles, getArticles, signUp, logIn, token, isLogin, logOut, getUserDetail, UserDetail, getComments, comments }
 }, { persist: true})

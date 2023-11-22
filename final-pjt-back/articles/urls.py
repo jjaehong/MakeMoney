@@ -10,3 +10,4 @@ urlpatterns = [
     path('<int:article_id>/comments/', views.comment_create),
 ]
 
+
