@@ -33,7 +33,6 @@ def article_list(request):
 
 # 단일 게시물 조회, 삭제, 수정
 @api_view(['GET', 'DELETE', 'PUT'])
-@permission_classes([IsAuthenticated])
 def article_detail(request, article_pk):
     # article = Article.objects.get(pk=article_pk)
     article = get_object_or_404(Article, pk=article_pk)
@@ -54,8 +53,8 @@ def article_detail(request, article_pk):
             return Response(serializer.data)
         # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def comment_list(request):
     # comments = Comment.objects.all()
     comments = get_list_or_404(Comment)
@@ -64,7 +63,6 @@ def comment_list(request):
 
 
 @api_view(['GET', 'DELETE', 'PUT'])
-@permission_classes([IsAuthenticated])
 def comment_detail(request, comment_pk):
     # comment = Comment.objects.get(pk=comment_pk)
     comment = get_object_or_404(Comment, pk=comment_pk)
@@ -84,10 +82,10 @@ def comment_detail(request, comment_pk):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def comment_create(request, article_pk):
-    # article = Article.objects.get(pk=article_pk)
-    article = get_object_or_404(Article, pk=article_pk)
+def comment_create(request, article_id):
+    # article = Article.objects.get(id=article_id)
+    print('ok')
+    article = get_object_or_404(Article, id=article_id)
     serializer = CommentSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(article=article)
