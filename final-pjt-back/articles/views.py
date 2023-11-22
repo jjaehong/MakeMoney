@@ -33,7 +33,6 @@ def article_list(request):
 
 # 단일 게시물 조회, 삭제, 수정
 @api_view(['GET', 'DELETE', 'PUT'])
-@permission_classes([IsAuthenticated])
 def article_detail(request, article_pk):
     # article = Article.objects.get(pk=article_pk)
     article = get_object_or_404(Article, pk=article_pk)

@@ -2,6 +2,7 @@
     <div>
         <header>
           <div v-if="store.isLogin">
+            <!-- <h3>{{ user.username }}님 환영합니다!</h3>  -->
             <nav class="nav d-flex justify-content-center align-items-center bg-dark text-white gap-10 ">
               <RouterLink :to="{name : 'home'}">HOME</RouterLink> 
               <RouterLink :to="{name : 'products'}">PRODUCTS</RouterLink> 
@@ -27,6 +28,22 @@
 <script setup>
 import { RouterView, RouterLink } from 'vue-router';
 import { useCounterStore } from '@/stores/counter'
+import { onMounted } from 'vue';
+import axios from 'axios';
+
+// onMounted (()=> {
+//   axios({
+//     method:'get',
+//     url:`accounts/`
+//   })
+//   .then((res) => {
+//     console.log(res)
+//   })
+//   .catch((err) => {
+//     console.log(err)
+//   })
+// })
+
 
 const store = useCounterStore()
 </script>
