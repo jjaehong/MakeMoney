@@ -216,9 +216,7 @@ def product_list(request):
 # 특정 예적금 상품의 옵션 리스트 출력
 @api_view(['GET'])
 def product_options(request,fin_prdt_cd):
-    
     if request.method == 'GET':
-
         options = ProductListOptions.objects.filter(fin_prdt_cd=fin_prdt_cd)
         serializer = ProductListOptionsSerializer(options, many = True)
         return Response(serializer.data)

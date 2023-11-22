@@ -69,7 +69,6 @@ const updateprofile = function(UserDetail) {
         console.log(err)
       })
       router.push({name:'profile'})
-
     }
 
 onMounted(() => {

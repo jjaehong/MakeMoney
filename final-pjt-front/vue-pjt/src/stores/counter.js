@@ -33,6 +33,7 @@ export const useCounterStore = defineStore('counter', () => {
     })
     .then(res => {
       total.value = res.data
+      if(deposit.value.length == 0){
       res.data.forEach((element) => {
         if (!bank.value.includes(element.kor_co_nm)){
           bank.value.push(element.kor_co_nm)
@@ -44,7 +45,9 @@ export const useCounterStore = defineStore('counter', () => {
           savings.value.push(element)
         }
       })
+    }
     })
+  
     .catch(err => console.log(err))
   }
 
@@ -143,7 +146,6 @@ export const useCounterStore = defineStore('counter', () => {
       } 
     })
     .then((res) =>{
-      console.log(res.data)
       UserDetail.value = res.data
     })
     .catch((err) => {

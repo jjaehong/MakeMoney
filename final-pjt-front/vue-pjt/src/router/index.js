@@ -10,9 +10,13 @@ import DetailView from '@/views/DetailView.vue'
 import CreateView from '@/views/CreateView.vue'
 import SignUpView from '@/views/SignUpView.vue'
 import LogInView from '@/views/LogInView.vue'
-import UpdateView from '@/views/UpdateView.vue'
+
 import UpdateProfileView from '@/views/UpdateProfileView.vue'
-import test from '@/mainviews/test.vue'
+
+import UpdateView from '@/views/UpdateView.vue'
+
+
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -73,23 +77,15 @@ const router = createRouter({
       component: LogInView
     },
     {
+      path: '/updateprofile/:username',
+      name: 'updateprofile',
+      component: UpdateProfileView
+    },
+    {
       path:'/update/:id',
       name:'UpdateView',
       component: UpdateView
     },
-    {
-    path: '/updateprofile/:username',
-    name: 'updateprofile',
-    component: UpdateProfileView
-    },
-
-
-    {
-      path: '/test',
-      name: 'test',
-      component: test
-    },
-  
   ]
 })
 import { useCounterStore } from '@/stores/counter'

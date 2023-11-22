@@ -31,27 +31,56 @@
         <div class="d-flex">
             <div v-if="store.UserDetail.loan">LOAN : {{ store.UserDetail.loan }}</div>
             <div v-else>loan : 값을 넣어주세요.</div>
-            
+    
         </div>
-            <div v-if="store.UserDetail.financial_products" v-for="product in store.UserDetail.financial_products" class="d-flex">Financial_products : {{ product }}</div>
-            <div v-else>Financial_products : 등록된 상품이 없습니다.</div>
-    </div>
+            <div v-for="product in store.total">
+                <div v-if="data_str.includes(product.fin_prdt_cd)">
+                    Financial_products
+                    <div>공시 제출월 {{ product.dcls_month }}</div>
+                    <div>금융 회사명 {{ product.kor_co_nm }}</div>
+                    <div>상품명 {{ product.fin_prdt_nm }}</div>
+                    <div>가입제한 {{ product.join_deny }}</div>
+                    <div>가입 방법 {{ product.join_way }}</div>
+                    <div>우대조건 {{ product.spcl_cnd }}</div>
+                    <button @click="del(product)" class="btn btn-primary">상품 삭제</button>
+                </div>
+            </div>
+        </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useCounterStore } from '../stores/counter'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 
 const router = useRouter()
 const store = useCounterStore()
-
+const data_str = ref([])
 onMounted(() => {
     store.getUserDetail()
+    store.getdeposit()
+    console.log(store.UserDetail.financial_products)
+    console.log(store.UserDetail.financial_products.split(','))
+
+    data_str.value = store.UserDetail.financial_products.split(',')
+
+    console.log(data_str.value)
 })
 
 const goprofile = function(UserDetail){
     router.push({name:'updateprofile', params:{username:UserDetail.username}})
+}
+
+const del = function(object){
+    const financialProducts = store.UserDetail.financial_products || []
+
+    const index = financialProducts.indexOf(object);
+
+    if (index !== -1) {
+        financialProducts.splice(index, 1);
+    }
+    console.log(store.UserDetail.financial_products)
 }
 </script>
 
