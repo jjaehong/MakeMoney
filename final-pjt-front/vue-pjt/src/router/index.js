@@ -84,6 +84,7 @@ const router = createRouter({
       name: 'test',
       component: test
     }
+  
   ]
 })
 import { useCounterStore } from '@/stores/counter'
