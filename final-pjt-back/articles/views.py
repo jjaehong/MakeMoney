@@ -15,7 +15,7 @@ from .models import Article, Comment
 
 # 게시물 목록 불러오기
 @api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def article_list(request):
     if request.method == 'GET':
         # articles = Article.objects.all()
@@ -24,6 +24,7 @@ def article_list(request):
         return Response(serializer.data)
 
     elif request.method == 'POST':
+        # print('ok')
         serializer = ArticleSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user)
@@ -84,9 +85,19 @@ def comment_detail(request, comment_pk):
 @api_view(['POST'])
 def comment_create(request, article_id):
     # article = Article.objects.get(id=article_id)
-    print('ok')
     article = get_object_or_404(Article, id=article_id)
     serializer = CommentSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(article=article)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def likes(request,article_id):
+    article = Article.objects.get(id=article_id)
+    if request.user in article.like_users.all():
+        article.like_users.remove(request.user)
+    else:
+        article.like_users.add(request.user)
+    serializer = ArticleSerializer(article)
+    return Response(serializer.data, status=status.HTTP_200_OK)

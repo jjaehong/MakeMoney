@@ -10,6 +10,8 @@
       <p>작성일 : {{ article.created_at }}</p>
       <p>수정일 : {{ article.updated_at }}</p>
       <button @click="deleteArticle()">삭제</button>
+      <!-- <i @click="likes()" v-model="toggle" class="bi bi-arrow-through-heart"></i> -->
+      <!-- <Likes :article="article"/> -->
     </div>
     <hr>
     <h4>댓글 작성란</h4>
@@ -49,10 +51,11 @@ import { useCounterStore } from '@/stores/counter'
 import { useRoute,useRouter } from 'vue-router'
 import { RouterLink, RouterView } from 'vue-router'
 // import CommentList from '@/components/CommentList.vue'
+import Likes from '@/components/Likes.vue'
 
 
 const store = useCounterStore()
-
+const toggle = ref(false)
 // router가 데이터를 다른 url을 보낼 때
 // route는 이 페이지에서 데이터 받은 것을 사용할 때
 const route = useRoute()
@@ -83,7 +86,7 @@ const deleteArticle = function() {
     url: `${store.API_URL}/api/v1/articles/${route.params.id}`
   })
   .then((res) => {
-    console.log(res)
+    // console.log(res)
     router.push({name: 'community'})
   })
   .catch((err) => {
@@ -104,7 +107,7 @@ const createComment = function(event) {
     },
     })
     .then((res) => {
-      console.log(res.data)
+      // console.log(res.data)
       content.value = ''
 
     })
@@ -113,10 +116,17 @@ const createComment = function(event) {
     })
 }
 
+const likes = function () {
+  axios({
+    method:'post',
+    url:`${store.API_URL}/api/v1/articles/${route.params.id}/likes/`
+  })
+}
 
 onUpdated(() => {
   store.getComments()
 })
+
 
 
 </script>
