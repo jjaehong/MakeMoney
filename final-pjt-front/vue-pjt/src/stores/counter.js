@@ -14,7 +14,8 @@ export const useCounterStore = defineStore('counter', () => {
   const country = ref([])
   const exchange = ref([])
   const UserDetail = ref([])
-  const cost = ref('')
+  const getuser = ref([])
+  // const cost = ref('')
   // const period = ref('')
   const isLogin = computed(() => {
     if (token.value === null) {
@@ -148,7 +149,9 @@ export const useCounterStore = defineStore('counter', () => {
     .catch((err) => {
       console.log(err)
     })
+
   }
+
 
   return { deposit, API_URL, getdeposit, bank, savings, total, getexchange, country, exchange, 
     articles, getArticles, signUp, logIn, token, isLogin, logOut, getUserDetail, UserDetail }
