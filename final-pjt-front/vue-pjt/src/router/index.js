@@ -10,11 +10,15 @@ import DetailView from '@/views/DetailView.vue'
 import CreateView from '@/views/CreateView.vue'
 import SignUpView from '@/views/SignUpView.vue'
 import LogInView from '@/views/LogInView.vue'
+<<<<<<< HEAD
+import UpdateProfileView from '@/views/UpdateProfileView.vue'
+=======
 import UpdateView from '@/views/UpdateView.vue'
 
 
 import test from '@/mainviews/test.vue'
 
+>>>>>>> 496b65325b8256aa3bab58507b526c3445e3bb80
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -74,6 +78,11 @@ const router = createRouter({
       component: LogInView
     },
     {
+<<<<<<< HEAD
+      path: '/updateprofile/:username',
+      name: 'updateprofile',
+      component: UpdateProfileView
+=======
       path:'/update/:id',
       name:'UpdateView',
       component: UpdateView
@@ -83,6 +92,7 @@ const router = createRouter({
       path: '/test',
       name: 'test',
       component: test
+>>>>>>> 496b65325b8256aa3bab58507b526c3445e3bb80
     }
   
   ]

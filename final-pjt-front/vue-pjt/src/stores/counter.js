@@ -14,7 +14,8 @@ export const useCounterStore = defineStore('counter', () => {
   const country = ref([])
   const exchange = ref([])
   const UserDetail = ref([])
-  const cost = ref('')
+  const getuser = ref([])
+  // const cost = ref('')
   // const period = ref('')
   const isLogin = computed(() => {
     if (token.value === null) {
@@ -132,17 +133,26 @@ export const useCounterStore = defineStore('counter', () => {
         console.log(err)
       })
   }
+
   const getUserDetail = function() {
     axios({
       method: 'get',
-      url: `${API_URL}/accounts/user/`,  
+      url: `${API_URL}/accounts/user/`, 
+      headers: {
+        Authorization: `Token ${token.value}`
+      } 
     })
     .then((res) =>{
-
+      console.log(res.data)
+      UserDetail.value = res.data
     })
     .catch((err) => {
       console.log(err)
     })
+
   }
-  return { deposit, API_URL, getdeposit, bank, savings, total, getexchange, country, exchange, articles, getArticles, signUp, logIn, token, isLogin, logOut }
+
+
+  return { deposit, API_URL, getdeposit, bank, savings, total, getexchange, country, exchange, 
+    articles, getArticles, signUp, logIn, token, isLogin, logOut, getUserDetail, UserDetail }
 }, { persist: true})

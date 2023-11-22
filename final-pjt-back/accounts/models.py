@@ -12,7 +12,7 @@ class User(AbstractUser):
     age = models.IntegerField(blank=True,null=True)
     money = models.IntegerField(blank=True,null=True)
     salary = models.IntegerField(blank=True, null=True)
-    
+    loan = models.IntegerField(blank=True, null=True)
     # 리스트 데이터 저장을 위해 Text 형태로 저장
     financial_products = models.TextField(blank=True, null=True)
 

@@ -85,7 +85,9 @@ REST_FRAMEWORK = {
     ],
 }
 
-
+REST_AUTH = {
+  'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserSerializer',
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
