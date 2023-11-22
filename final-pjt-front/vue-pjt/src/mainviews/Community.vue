@@ -19,6 +19,7 @@
   onMounted(() => {
     store.getArticles()
   })
+
   
   </script>
   

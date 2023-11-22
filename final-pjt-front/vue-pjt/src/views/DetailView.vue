@@ -17,22 +17,38 @@
       <input type="text" v-model="content">
       <input type="submit" value="댓글 작성">
     </form>
+    <hr>
+    <h3>댓글 목록</h3>
+    <div v-for="comment in store.comments" :key="comment.id">
+      <div class="d-flex flex-column border border-secondary">
+        <div class="d-flex justify-content-between border border-secondary" >
+          <div> 작성자 : {{ comment.user.username }} </div>
+          <div> {{ comment.updated_at }} </div>  
+        </div>
+        
+        <h4> {{ comment.content }} </h4>
 
 
-    <!-- <div v-if="comment">
-    
-    
-    </div> -->
+      </div>
+
+    </div>
+    <!-- <CommentList
+      v-for="comment in store.comments"
+      :key="comment.id"
+      :comment="comment"
+    /> -->
+
 
   </div>
 </template>
 
 <script setup>
 import axios from 'axios'
-import { onMounted, ref } from 'vue'
+import { onMounted, onUpdated , ref } from 'vue'
 import { useCounterStore } from '@/stores/counter'
 import { useRoute,useRouter } from 'vue-router'
 import { RouterLink, RouterView } from 'vue-router'
+// import CommentList from '@/components/CommentList.vue'
 
 
 const store = useCounterStore()
@@ -88,13 +104,19 @@ const createComment = function(event) {
     },
     })
     .then((res) => {
-      console.log(res)
+      console.log(res.data)
+      content.value = ''
+
     })
     .catch((err) => {
       console.log(err)
     })
 }
 
+
+onUpdated(() => {
+  store.getComments()
+})
 
 
 </script>
