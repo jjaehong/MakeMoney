@@ -1,9 +1,7 @@
 <template>
     <div>
         <h1>게시글 수정 페이지</h1>
-
         <form @submit.prevent="putArticle()">
-
             <div>
                 <label for="title">제목:</label>
                 <input type="text" id="title" v-model.trim="title" >
@@ -67,9 +65,6 @@ const putArticle = function () {
             console.log(err)
         })
 }
-
-
-
 
 </script>
 
