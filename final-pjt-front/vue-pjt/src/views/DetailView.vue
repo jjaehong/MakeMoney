@@ -47,7 +47,6 @@ import { useCounterStore } from '@/stores/counter'
 import { useRoute, useRouter } from 'vue-router'
 import { RouterLink, RouterView } from 'vue-router'
 
-
 const store = useCounterStore()
 // router가 데이터를 다른 url을 보낼 때
 // route는 이 페이지에서 데이터 받은 것을 사용할 때
