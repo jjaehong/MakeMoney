@@ -86,6 +86,7 @@ const updateprofile = function(UserDetail) {
       })
       .then((res) => {
         console.log(res.data)
+        store.best_period = goal_period.value
       })
       .catch((err) => {
         console.log(err)

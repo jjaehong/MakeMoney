@@ -18,6 +18,7 @@ export const useCounterStore = defineStore('counter', () => {
   const data = ref('')
   const data_str = ref([])
   const getuser = ref([])
+  const best_period = ref('')
   // const cost = ref('')
   // const period = ref('')
   const isLogin = computed(() => {
@@ -187,5 +188,5 @@ export const useCounterStore = defineStore('counter', () => {
 
 
   return { deposit, API_URL, getdeposit, bank, savings, total, getexchange, country, exchange, 
-    articles, getArticles, signUp, logIn, token, isLogin, logOut, getUserDetail, UserDetail, getComments, comments, data, data_str }
+    articles, getArticles, signUp, logIn, token, isLogin, logOut, getUserDetail, UserDetail, getComments, comments, data, data_str, best_period }
 }, { persist: true})

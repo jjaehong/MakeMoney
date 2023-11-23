@@ -70,7 +70,7 @@
         </h4>
         <br>
         <div>
-            <button @click.prevent="toggleRecommendations" style="width: 200px;" class="btn btn-primary">{{ showRecommendations ? '추천 상품 숨기기' : '추천 상품 보기' }}</button>
+            <button @click.prevent="toggleRecommendations" style="width: 250px;" class="btn btn-primary">{{ showRecommendations ? '추천 상품 숨기기' : '추천 상품 보기' }}</button>
         </div>
         <div v-if="showRecommendations" class="product-container">
             <h3>추천금융상품 목록</h3>
@@ -137,9 +137,93 @@
                     </div>
             </div>
             </div>
-            </div>
-            <button @click.prevent="showgraph" style="width: 200px;" class="btn btn-primary">{{ show ? '그래프 숨기기' : '그래프 보기' }}</button>
+
+            <button @click.prevent="showgraph" style="width: 250px;" class="btn btn-primary">{{ show ? '그래프 숨기기' : '그래프 보기' }}</button>
             <chart v-if="show" :name="name" :data1="data1" :data2="data2" :day="recomment_day"/>
+            <div class="line"></div>
+            <h2> 3. {{ store.UserDetail.username }} 님의 목표기간에 따른 금융상품 추천</h2>
+            <h3>추천금융상품 목록</h3>
+            <div>
+                <button @click.prevent="toggleRecommendations1" style="width: 250px;" class="btn btn-primary">{{ showRecommendations1 ? '목표기간 추천 상품 숨기기' : '목표기간 추천 상품 보기' }}</button>
+            </div>
+            <div v-if="showRecommendations1">
+            <div class="row d-flex align-items-center border border-1px-solid-#ccc m-2 ">
+                <div class="col-2 text-center">공시 제출월</div>
+                <div class="vr p-0"></div>
+                <div class="col-2 text-center">금융회사명</div>
+                <div class="vr p-0"></div>
+                <div class="col-3 text-center">상품명</div>
+                <div class="vr p-0"></div>
+                <div class="col-1 text-center">6개월</div>
+                <div class="vr p-0"></div>
+                <div class="col-1 text-center">12개월</div>
+                <div class="vr p-0"></div>
+                <div class="col-1 text-center">24개월</div>
+                <div class="vr p-0"></div>
+                <div class="col-1 text-center">36개월</div>
+            </div>
+            <div v-for="(product, index) in best_conf" :key="index" class="border border-1px-solid-#ccc">
+                <div class="row d-flex align-items-center m-2"
+                    :class="{ 'gray-bg': index % 2 === 0, 'white-bg': index % 2 !== 0 }">
+                    <div @click="goDetail(product)" class="col-2 text-center">{{ product.dcls_month }}</div>
+                    <div @click="goDetail(product)" class="col-2 text-center">{{ product.kor_co_nm }}</div>
+                    <div @click="goDetail(product)" class="col-3 text-center">{{ product.fin_prdt_nm }}</div>
+                    <div @click="goDetail(product)" class="col-1 text-center">{{ product.month6 }}</div>
+                    <div @click="goDetail(product)" class="col-1 text-center">{{ product.month12 }}</div>
+                    <div @click="goDetail(product)" class="col-1 text-center">{{ product.month24 }}</div>
+                    <div class="col-1 text-center">{{ product.month36 }}</div>
+                    <button @click="goDetail(product)" class="col-1">상세보기</button>
+                    </div>
+                    <div class="fw-bold m-2" v-if="best_period==6 && product.type=='단리'">6개월 예상 수익 : {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*6*(1+product.month6/100)*0.5)).toFixed(2)) }} 만원</div>
+                    <div class="fw-bold m-2">
+                        <div v-if="best_period==6 && product.type=='단리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*6*(1+product.month6/100)*0.5 > 0">6개월 후 남은 목표금액(대출금 포함) : {{ parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*6*(1+product.month6/100)*0.5)).toFixed(2)) }}만원</div>
+                        <div v-if="best_period==6 && product.type=='단리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*6*(1+product.month6/100)*0.5 <= 0">목표금액을 달성하였습니다!</div>
+                    </div>
+                    <div class="fw-bold m-2" v-if="best_period==6 && product.type=='복리'">6개월 예상 수익 : {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*6*(((1+product.month6/100/12)^6-1)^6+1))).toFixed(2)) }}만원</div>
+                    <div class="fw-bold m-2">
+                        <div v-if="best_period==6 && product.type=='복리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*6*(((1+product.month6/100/12)^6-1)^6+1) > 0">6개월 후 남은 목표금액(대출금 포함) : {{ parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*6*(((1+product.month6/100/12)^6-1)^6+1))).toFixed(2)) }}만원</div>
+                        <div v-if="best_period==6 && product.type=='복리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*6*(((1+product.month6/100/12)^6-1)^6+1) <= 0">목표 금액을 달성하였습니다!</div>
+                    </div>
+
+                    <div class="fw-bold m-2" v-if="best_period==12 && product.type=='단리'">12개월 예상 수익 : {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month12/100))).toFixed(2)) }}만원</div>
+                    <div class="fw-bold m-2">
+                        <div v-if="best_period==12 && product.type=='단리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month12/100) > 0">12개월 후 남은 목표금액(대출금 포함) : {{ parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month12/100))).toFixed(2)) }}만원</div>
+                        <div v-if="best_period==12 && product.type=='단리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month12/100) <= 0">목표금액을 달성하였습니다.</div>
+                    </div>
+
+                    <div class="fw-bold m-2" v-if="best_period==12 && product.type=='복리'">12개월 예상 수익 : {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+product.month12/100/12)^12-1)^12+1))).toFixed(2)) }}만원</div>
+                    <div class="fw-bold m-2">
+                        <div v-if="best_period==12 && product.type=='복리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+product.month12/100/12)^12-1)^12+1) > 0">12개월 후 남은 목표금액(대출금 포함) : {{parseFloat((( store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+product.month12/100/12)^12-1)^12+1))).toFixed(2)) }}만원</div>
+                        <div v-if="best_period==12 && product.type=='복리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+product.month12/100/12)^12-1)^12+1) <= 0">목표 금액을 달성하였습니다!</div>
+                    </div>
+
+                    <div class="fw-bold m-2" v-if="best_period==24 && product.type=='단리'">24개월 예상 수익 : {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month24/100)*2)).toFixed(2)) }}만원</div>
+                    <div class="fw-bold m-2">
+                        <div v-if="best_period==24 && product.type=='단리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month24/100)*2 > 0">24개월 후 남은 목표금액(대출금 포함) :  {{ parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month24/100)*2)).toFixed(2)) }}만원</div>
+                        <div v-if="best_period==24 && product.type=='단리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month24/100)*2 <= 0">목표금액을 달성하였습니다!</div>
+                    </div>
+
+                    <div class="fw-bold m-2" v-if="best_period==24 && product.type=='복리'">24개월 예상 수익 :  {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*24*(((1+product.month24/100/12)^24-1)^24+1))).toFixed(2)) }} 만원</div>
+                    <div class="fw-bold m-2">
+                        <div v-if="best_period==24 && product.type=='복리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*24*(((1+product.month24/100/12)^24-1)^24+1) > 0">24개월 후 남은 목표금액(대출금 포함) :  {{ parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*24*(((1+product.month24/100/12)^24-1)^24+1))).toFixed(2)) }}만원</div>
+                        <div v-if="best_period==24 && product.type=='복리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*24*(((1+product.month24/100/12)^24-1)^24+1) <= 0">목표금액을 달성하였습니다.</div>
+                    </div>
+                    <div class="fw-bold m-2" v-if="best_period==36 && product.type=='단리'">36개월 예상 수익 : {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month36/100)*3)).toFixed(2)) }}만원</div>
+                    <div class="fw-bold m-2">
+                        <div v-if="best_period==36 && product.type=='단리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month36/100)*3 > 0">36개월 후 남은 목표금액(대출금 포함) :  {{ parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month36/100)*3)).toFixed(2)) }}만원</div>
+                        <div v-if="best_period==36 && product.type=='단리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month36/100)*3 <= 0">목표금액을 달성하였습니다!</div>
+                    </div>
+
+                    <div class="fw-bold m-2" v-if="best_period==36 && product.type=='복리'">36개월 예상 수익 :  {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*36*(((1+product.month36/100/12)^36-1)^36+1))/6.6).toFixed(2)) }} 만원</div>
+                    <div class="fw-bold m-2">
+                        <div v-if="best_period==36 && product.type=='복리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*36*(((1+product.month36/100/12)^36-1)^36+1) > 0">36개월 후 남은 목표금액(대출금 포함) :  {{ parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*36*(((1+product.month24/100/12)^36-1)^36+1))/6.6).toFixed(2)) }}만원</div>
+                        <div v-if="best_period==36 && product.type=='복리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*36*(((1+product.month36/100/12)^36-1)^36+1) <= 0">목표금액을 달성하였습니다.</div>
+                    </div>
+                </div>
+            </div>
+                <button @click.prevent="showgraph1" style="width: 250px;" class="btn btn-primary">{{ show1 ? '그래프 숨기기' : '그래프 보기' }}</button>
+                <chart1 v-if="show1" :data3="data3" :data4="data4" :name1="name1" :day="best_period"/>
+            </div>
 
 </template>
 
@@ -149,6 +233,7 @@ import { useCounterStore } from '../stores/counter'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import chart from '../components/chart.vue'
+import chart1 from '../components/chart1.vue'
 const router = useRouter()
 const store = useCounterStore()
 const best_period = ref('')
@@ -158,7 +243,11 @@ const recomment_day = ref('')
 const data1 = ref([])
 const data2 = ref([])
 const name = ref([])
+const data3 = ref([])
+const data4 = ref([])
+const name1 = ref([])
 const show = ref(false)
+const show1 = ref(false)
 const API_URL = 'http://127.0.0.1:8000'
 onMounted(() => {
     store.getUserDetail()
@@ -180,7 +269,6 @@ onMounted(() => {
             .catch((err) => console.log(err))
     })
     best_period.value = store.UserDetail.goal_period
-    console.log(store.UserDetail.consumption / store.UserDetail.salary)
     best_conf.value = store.savings.filter((element) => element.hasOwnProperty(best_period.value))
         .sort((a, b) => b[best_period.value] - a[best_period.value])
         .slice(0, 5)
@@ -202,8 +290,6 @@ onMounted(() => {
             .sort((a, b) => b[6] - a[6])
             .slice(0, 5)
     }
-    console.log(recomment_conf.value)
-    console.log(recomment_day.value)
 })
 
 const goprofile = function (UserDetail) {
@@ -235,6 +321,15 @@ const toggleRecommendations = () => {
   showRecommendations.value = !showRecommendations.value;
 };
 
+const showRecommendations1 = ref(false)
+
+const toggleRecommendations1 = () => {
+    showRecommendations1.value = !showRecommendations1.value
+    best_period.value = store.UserDetail.goal_period
+    best_conf.value = store.savings.filter((element) => element.hasOwnProperty(best_period.value))
+        .sort((a, b) => b[best_period.value] - a[best_period.value])
+        .slice(0, 5)
+}
 const showgraph = () => {
     show.value = !show.value
     name.value = []
@@ -275,6 +370,109 @@ const showgraph = () => {
             }
         }
     }
+}
+
+const showgraph1 = function() {
+    best_period.value = store.UserDetail.goal_period
+    best_conf.value = store.savings.filter((element) => element.hasOwnProperty(best_period.value))
+        .sort((a, b) => b[best_period.value] - a[best_period.value])
+        .slice(0, 5)
+    show1.value = !show1.value
+    name1.value = []
+    data3.value = []
+    data4.value = []
+    for(let i of best_conf.value){
+        console.log(i)
+    name1.value.push(i.fin_prdt_nm)
+    if(best_period.value==6){
+    
+        if(i.type=='단리'){
+    data3.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*6*(1+i.month6/100)*0.5)).toFixed(2)))
+    if(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*6*(1+i.month6/100)*0.5)).toFixed(2)) > 0){
+    data4.value.push(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*6*(1+i.month6/100)*0.5)).toFixed(2)))
+    }
+    else if(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*6*(1+i.month6/100)*0.5)).toFixed(2)) <= 0){
+        data4.value.push(0)
+    }
+        }
+        else if(i.type=='복리'){
+    data3.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*6*(((1+i.month6/100/12)^6-1)^6+1))).toFixed(2)))
+    if(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*6*(((1+i.month6/100/12)^6-1)^6+1))).toFixed(2)) > 0){
+    data4.value.push(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*6*(((1+i.month6/100/12)^6-1)^6+1))).toFixed(2)))
+    }
+    else if(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*6*(((1+i.month6/100/12)^6-1)^6+1))).toFixed(2)) <= 0){
+        data4.value.push(0)
+    }
+        }
+        }
+
+    else if (best_period.value==12) {
+        if(i.type=='단리'){
+    data3.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+i.month12/100))).toFixed(2)))
+    if(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+i.month12/100))).toFixed(2)) > 0){
+    data4.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+i.bestmonth12/100))).toFixed(2)))
+        }
+    else if(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+i.month12/100))).toFixed(2)) <= 0){
+        data4.value.push(0)
+    }
+}
+        else if(i.type=='복리'){
+    data3.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+i.month12/100/12)^12-1)^12+1))).toFixed(2)))
+    if(parseFloat((( store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+i.month12/100/12)^12-1)^12+1))).toFixed(2)) > 0){
+        data4.value.push(parseFloat((( store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+i.month12/100/12)^12-1)^12+1))).toFixed(2)))
+    }
+    else if(parseFloat((( store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+i.month12/100/12)^12-1)^12+1))).toFixed(2)) <=0){
+        data4.value.push(0)
+    }
+    
+    }
+    }
+
+    else if (best_period.value==24) {
+        if(i.type=='단리'){
+    data3.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+i.month24/100)*2)).toFixed(2)))
+    if(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+i.month24/100)*2)).toFixed(2)) > 0){
+    data4.value.push(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+i.month24/100)*2)).toFixed(2)))
+    }
+    else if(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+i.month24/100)*2)).toFixed(2)) <= 0){
+        data4.value.push(0)
+    }
+        }
+        else if(i.type=='복리'){
+    data3.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*24*(((1+i.month24/100/12)^24-1)^24+1))).toFixed(2)))
+    if(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*24*(((1+i.month24/100/12)^24-1)^24+1))).toFixed(2)) > 0){
+    data4.value.push(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*24*(((1+i.month24/100/12)^24-1)^24+1))).toFixed(2)))
+    }
+    else if(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*24*(((1+i.month24/100/12)^24-1)^24+1))).toFixed(2)) <= 0){
+        data4.value.push(0)
+    }
+        }
+    }
+
+
+    else if (best_period.value==36){
+        if(i.type=='단리'){
+    data3.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+i.month36/100)*3)).toFixed(2)))
+    if(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+i.month36/100)*3)).toFixed(2)) > 0){
+    data4.value.push(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+i.month36/100)*3)).toFixed(2)))
+    }
+    else if(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+i.month36/100)*3)).toFixed(2)) <= 0){
+        data4.value.push(0)
+    }
+        }
+        else if(i.type=='복리'){
+    data3.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*36*(((1+i.month36/100/12)^36-1)^36+1))/6.6).toFixed(2)))
+    if(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*36*(((1+i.month36/100/12)^36-1)^36+1))).toFixed(2)) > 0){
+    data4.value.push(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*36*(((1+i.month36/100/12)^36-1)^36+1)/10)).toFixed(2)))
+    }
+    else if(parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*36*(((1+i.month24/100/12)^36-1)^36+1))).toFixed(2)) <= 0){
+        data4.value.push(0)
+    }
+        }
+
+    }
+    console.log(data4.value)
+}
 }
 </script>
 

@@ -16,9 +16,9 @@
       </div>
     </div>
     <hr>
-    <h3>댓글 작성란</h3>
+    <h4>댓글 작성란</h4>
     <form @submit="createComment">
-      <input type="text" class="w-75" v-model="content">
+      <input type="text" v-model="content">
       <input type="submit" value="댓글 작성">
     </form>
     <hr>
@@ -49,6 +49,8 @@ import { useCounterStore } from '@/stores/counter'
 import { useRoute, useRouter } from 'vue-router'
 import { RouterLink, RouterView } from 'vue-router'
 
+
+
 const store = useCounterStore()
 // router가 데이터를 다른 url을 보낼 때
 // route는 이 페이지에서 데이터 받은 것을 사용할 때
@@ -64,8 +66,8 @@ const content = ref(null)
 //   }
 // })
 const islike = computed(() => {
-  // console.log(store.UserDetail.id)
-  // console.log(article.value.like_users)
+  console.log(store.UserDetail.id)
+  console.log(article.value.like_users)
   return article.value.like_users.includes(store.UserDetail.id)
 
 })
@@ -120,6 +122,14 @@ const deleteComment = function (id) {
   .catch(() => {
     console.log(err)
   })
+    .then((res) => {
+      // console.log(res)
+      
+      router.push({ name: 'community' })
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 }
 
 
