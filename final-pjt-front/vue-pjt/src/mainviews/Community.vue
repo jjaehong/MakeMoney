@@ -1,7 +1,7 @@
 <template>
     <div>
-      <h1>Article Page</h1>
-      <RouterLink :to="{ name: 'CreateView' }">
+      <h1>게시글 페이지</h1>
+      <RouterLink :to="{ name: 'CreateView' }" class="create">
         [CREATE]
       </RouterLink>
       <ArticleList />
@@ -28,5 +28,13 @@
   </script>
   
   <style scoped>
-  
+  h1 {
+    margin: 20px;
+  }
+
+  .create {
+    margin: 30px;
+  }
+
+
   </style>

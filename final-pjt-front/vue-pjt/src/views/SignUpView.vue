@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="fw-bold">MAKE MONEY</h1>
+    <h1 class="fw-bold">MOMM</h1>
     <div class="login">
       <h1 class="signup-title">회원가입</h1>
       <form @submit.prevent="signUp" class="signup-form">

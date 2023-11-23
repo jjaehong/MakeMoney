@@ -1,6 +1,6 @@
 <template>
     <div v-if="store.isLogin">
-      <h1 class="home-title">Home</h1>
+      <h1 class="home-title">MOMM Home</h1>
       <div class="container">
         <RouterLink :to="{ name: 'products' }" class="card" style="width: 18rem;">
           <img class="card-img-top" src="../그림/예적금.jpg" alt="Card image cap">
@@ -75,6 +75,7 @@
   
   .home-title {
     color: #3498db; /* Blue color */
+    margin: 20px;
   }
   
   img {

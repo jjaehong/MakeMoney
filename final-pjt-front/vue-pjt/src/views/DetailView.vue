@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Detail</h1>
+    <h1>게시글 상세정보</h1>
     <RouterLink :to="{ name: 'UpdateView', params: { id: $route.params.id } }">
       [게시글 수정]
     </RouterLink>
@@ -12,7 +12,7 @@
       <div class="d-flex justify-content-between">
         <span class="bi bi-arrow-through-heart-fill h1 " :class="{ 'heart': islike }" @click="likes(store.UserDetail.username)">
         </span>
-        <button @click="deleteArticle(article)">게시글 삭제</button>
+        <button @click="deleteArticle(article.id)">게시글 삭제</button>
       </div>
     </div>
     <hr>
@@ -32,7 +32,9 @@
           </div>
           <div class="d-flex justify-content-between">
             <h5 class="w-75"> {{ comment.content }} </h5>
-            <button @click.prevent="deleteComment(comment.id)">댓글 삭제</button>
+            <div v-if="store.UserDetail && comment.user.id === store.UserDetail.id">
+              <button @click.prevent="deleteComment(comment.id)"  >댓글 삭제</button>
+            </div>
           </div>
         </div>
       </div>
@@ -54,7 +56,7 @@ const route = useRoute()
 const router = useRouter()
 const article = ref(null)
 const content = ref(null)
-const comment = ref(null)
+
 
 // watch(dfdf, (new, old) => {
 //   if (new !==old ) {
@@ -85,15 +87,15 @@ onMounted(() => {
     })
 })
 
-const deleteArticle = function (article) {
+const deleteArticle = function (id) {
 
     axios({
       method: 'delete',
-      url: `${store.API_URL}/api/v1/articles/${article.id}/`
+      url: `${store.API_URL}/api/v1/articles/${id}/`
     })
       .then((res) => {
-        // console.log(res)
-        
+        // store.articles를 돌면서 삭제한 놈과 다른 놈들을 남겨둠
+        store.articles = store.articles.filter((article) => {article.id !== id})        
         router.push({ name: 'community' })
       })
       .catch((err) => {
@@ -102,22 +104,24 @@ const deleteArticle = function (article) {
   }
 
 
-
 const deleteComment = function (id) {
   axios({
     method:'delete',
     url:`${store.API_URL}/api/v1/articles/comments/${id}`,
-    data:{
-      comment:id.value,
-    }
+    // data:{
+    //   comment:id.value,
+    // }
   })
   .then((res) => {
     console.log(res.data)
+    // 중괄호를 써주면 return이 따로 없음
+    store.comments = store.comments.filter((comment) => comment.id !== id)
   })
   .catch(() => {
     console.log(err)
   })
 }
+
 
 const createComment = function (event) {
   event.preventDefault()
@@ -134,7 +138,7 @@ const createComment = function (event) {
     .then((res) => {
       // console.log(res.data)
       content.value = ''
-
+      store.getComments()
     })
     .catch((err) => {
       console.log(err)

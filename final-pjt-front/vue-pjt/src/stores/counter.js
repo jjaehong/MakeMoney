@@ -71,13 +71,10 @@ export const useCounterStore = defineStore('counter', () => {
   }
 
   // DRF에 article 조회 요청을 보내는 action
-  const getArticles = function (items) {
+  const getArticles = function () {
     axios({
       method: 'get',
       url: `${API_URL}/api/v1/articles/`,
-      data:{
-        items:items.value
-      },
       headers: {
         Authorization: `Token ${token.value}`
       }

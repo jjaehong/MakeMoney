@@ -5,7 +5,7 @@
         <div class="user-info">
           <div class="d-flex user-section">
             <audio controls class="audio-player" style="margin-right: auto;">
-              <source src="./메이플스토리-헤네시스.mp3" type="audio/mp3">
+              <source src="./MOMM.mp3" type="audio/mp3">
               Your browser does not support the audio element.
             </audio>
               <div class="username">{{ store.UserDetail.username }}님 환영합니다!</div>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <br>
-    <h1 class="fw-bold">MAKE MONEY</h1>
+    <h1 class="fw-bold">MOMM</h1>
     <form @submit.prevent="logIn" class="login">
       <div>
         <h3>Login</h3>
