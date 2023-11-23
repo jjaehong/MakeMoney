@@ -72,10 +72,13 @@ export const useCounterStore = defineStore('counter', () => {
   }
 
   // DRF에 article 조회 요청을 보내는 action
-  const getArticles = function () {
+  const getArticles = function (items) {
     axios({
       method: 'get',
       url: `${API_URL}/api/v1/articles/`,
+      data:{
+        items:items.value
+      },
       headers: {
         Authorization: `Token ${token.value}`
       }
@@ -98,6 +101,7 @@ export const useCounterStore = defineStore('counter', () => {
       }
     })
       .then((res) => {
+        console.log(res.data)
         comments.value = res.data
       })
       .catch((err) => {

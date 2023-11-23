@@ -292,10 +292,6 @@ onMounted(() => {
     }
 })
 
-const goDetail = function(target){
-    router.push({name:'productsdetail', params:{cd:target.fin_prdt_cd}})
-}
-
 const goprofile = function (UserDetail) {
     router.push({ name: 'updateprofile', params: { username: UserDetail.username } })
 }
@@ -498,10 +494,6 @@ const showgraph1 = function() {
 .btn-primary {
     margin-bottom: 20px;
     margin-left: 20px;
-}
-
-.btn-danger {
-
 }
 
 .profile-info {

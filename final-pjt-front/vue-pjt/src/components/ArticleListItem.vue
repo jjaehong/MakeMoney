@@ -4,9 +4,9 @@
       <p> 작성자 : {{ store.UserDetail.username }} </p>
       <p>{{ article.updated_at }}</p>
     </div>
-    <h5 class="article-id">게시물 번호: {{ article.id }}</h5>
+    <!-- <h5 class="article-id">게시물 번호: {{ article.id }}</h5> -->
     <div>
-      <h4>{{ article.title }}</h4>
+      <h4 class="article-title" >{{ article.title }}</h4>
       <p>{{ article.content }}</p>
     </div>
     <div class="d-flex gap-3" >
@@ -30,6 +30,7 @@ import { onMounted } from 'vue';
 defineProps({
   article: Object
 })
+
 const store = useCounterStore()
 onMounted(() => {
   store.getUserDetail()
@@ -40,11 +41,9 @@ onMounted(() => {
 
 <style scoped>
 /* Blue theme styles */
-.article-id {
-  color: #3498db; /* Blue color */
+.article-title {
+  color: #3498db;
 }
-
-.article-title,
 .article-content {
   color: #2c3e50; /* Darker text color for better readability */
 }
