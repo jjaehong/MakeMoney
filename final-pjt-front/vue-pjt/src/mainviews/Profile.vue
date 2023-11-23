@@ -29,12 +29,12 @@
 
         </div>
         <div class="d-flex">
-            <div v-if="store.UserDetail.loan">LOAN : {{ store.UserDetail.loan }}</div>
-            <div v-else>loan : 값을 넣어주세요.</div>
+            <div v-if="store.UserDetail.loan_money">LOAN_MONEY : {{ store.UserDetail.loan_money }}</div>
+            <div v-else>LOAN_MONEY : 값을 넣어주세요.</div>
     
         </div>
-            <div v-if="store.UserDetail.username" v-for="product in store.total">
-                <div v-if="data_str.includes(product.fin_prdt_cd)">
+            <div v-if="store.data" v-for="product in store.total">
+                <div v-if="store.data_str.includes(product.fin_prdt_cd)">
                     Financial_products
                     <div>공시 제출월 {{ product.dcls_month }}</div>
                     <div>금융 회사명 {{ product.kor_co_nm }}</div>
@@ -45,6 +45,7 @@
                     <button @click="del(product.fin_prdt_cd)" class="btn btn-primary">상품 삭제</button>
                 </div>
             </div>
+            <div v-else>Financial_products : 저장된 금융 상품이 없습니다.</div>
         </div>
 </template>
 
@@ -53,20 +54,13 @@ import { onMounted, ref } from 'vue'
 import { useCounterStore } from '../stores/counter'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
-const data = ref('')
 const router = useRouter()
 const store = useCounterStore()
-const data_str = ref([])
+
 const API_URL = 'http://127.0.0.1:8000'
 onMounted(() => {
     store.getUserDetail()
     store.getdeposit()
-    console.log(store.UserDetail.financial_products)
-    console.log(store.UserDetail.financial_products.split(','))
-
-    data_str.value = store.UserDetail.financial_products.split(',')
-
-    console.log(data_str.value)
 })
 
 const goprofile = function(UserDetail){
@@ -75,13 +69,13 @@ const goprofile = function(UserDetail){
 
 const del = function(object){
 
-    data_str.value = data_str.value.filter((element) => element != object)
-    data.value = data_str.value.join(',')
+    store.data_str = store.data_str.filter((element) => element != object)
+    store.data = store.data_str.join(',')
     axios({
         method: 'post',
         url: `${API_URL}/accounts/update/${store.UserDetail.id}/`,
         data: {
-            financial_products:data.value
+            financial_products:store.data
         }
     })
     .then((res) => {

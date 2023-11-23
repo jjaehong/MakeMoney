@@ -15,6 +15,8 @@ export const useCounterStore = defineStore('counter', () => {
   const country = ref([])
   const exchange = ref([])
   const UserDetail = ref([])
+  const data = ref('')
+  const data_str = ref([])
   const getuser = ref([])
   // const cost = ref('')
   // const period = ref('')
@@ -165,6 +167,11 @@ export const useCounterStore = defineStore('counter', () => {
     })
     .then((res) =>{
       UserDetail.value = res.data
+      data.value = res.data.financial_products
+      if(!data.value==''){
+          data_str.value = data.value.split(',')
+      }
+      
     })
     .catch((err) => {
       console.log(err)
@@ -174,5 +181,5 @@ export const useCounterStore = defineStore('counter', () => {
 
 
   return { deposit, API_URL, getdeposit, bank, savings, total, getexchange, country, exchange, 
-    articles, getArticles, signUp, logIn, token, isLogin, logOut, getUserDetail, UserDetail, getComments, comments }
+    articles, getArticles, signUp, logIn, token, isLogin, logOut, getUserDetail, UserDetail, getComments, comments, data, data_str }
 }, { persist: true})

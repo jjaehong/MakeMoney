@@ -18,56 +18,63 @@
             </form>
           </div>
           <div class="col-md-9">
-            <button @click="dep" class="btn btn-secondary">정기예금</button>
-            <button @click="sav" class="btn btn-secondary">정기적금</button>
-            <div class="row d-flex">
-                <div class="col-1">공시 제출월</div>
-                <div class="vr p-0"></div>
-                <div class="col-2">금융회사명</div>
-                <div class="vr p-0"></div>
-                <div class="col-3">상품명</div>
-                <div class="vr p-0"></div>
-                <div class="col-1">6개월</div>
-                <div class="vr p-0"></div>
-                <div class="col-1">12개월</div>
-                <div class="vr p-0"></div>
-                <div class="col-1">24개월</div>
-                <div class="vr p-0"></div>
-                <div class="col-1">36개월</div>
-                <div class="vr p-0"></div>
+            <div style="margin-bottom: 10px;">
+
+                <button @click="dep" class="btn btn-secondary">정기예금</button>
+                <button @click="sav" class="btn btn-secondary">정기적금</button>
             </div>
-                <div v-if="bank_name=='전체' && select==true && store.deposit.length > 0" v-for="deposit in store.deposit" style="display: block;">
-                    <div @click="goDetail(deposit)" class="row d-flex">
-                        <div class="col-1">{{ deposit.dcls_month }}</div>
-                        <div class="vr p-0"></div>  
-                        <div class="col-2">{{ deposit.kor_co_nm }}</div>
-                        <div class="vr p-0"></div>
-                        <div class="col-3">{{ deposit.fin_prdt_nm }}</div>
-                        <div class="vr p-0"></div>
-                        <div class="col-1">{{ deposit.month6 }}</div>
-                        <div class="vr p-0"></div>
-                        <div class="col-1">{{ deposit.month12 }}</div>
-                        <div class="vr p-0"></div>
-                        <div class="col-1">{{ deposit.month24 }}</div>
-                        <div class="vr p-0"></div>
-                        <div class="col-1">{{ deposit.month36 }}</div>
-                        <div class="vr p-0"></div>
-                        <button class="btn btn-primary col-1" @click="save(deposit)" v-if="!data_str.includes(deposit.fin_prdt_cd) && store.deposit.length > 0">저장</button>
-                        <button class="btn btn-primary col-1" @click="del(deposit)" v-else>삭제</button>
-                    </div>
-                </div>
-                <div v-if="bank_name=='전체' && select==false && store.savings.length > 0" v-for="savings in store.savings" style="display: block;">
-                    <div @click="goDetail(savings)">{{ savings.dcls_month }}  {{ savings.kor_co_nm }}  {{ savings.fin_prdt_nm }} {{ savings.month6 }} {{ savings.month12 }} {{ savings.month24 }} {{ savings.month36 }}</div>
-                    <button class="btn btn-primary" @click="save(savings)" v-if="!data_str.includes(savings.fin_prdt_cd) && store.deposit.length > 0">저장</button>
-                    <button class="btn btn-primary" @click="del(savings)" v-else>삭제</button>
-                </div>
+<div class="row d-flex align-items-center">
+    <div class="col-2 text-center">공시 제출월</div>
+    <div class="vr p-0"></div>
+    <div class="col-2 text-center">금융회사명</div>
+    <div class="vr p-0"></div>
+    <div class="col-3 text-center">상품명</div>
+    <div class="vr p-0"></div>
+    <div class="col-1 text-center">6개월</div>
+    <div class="vr p-0"></div>
+    <div class="col-1 text-center">12개월</div>
+    <div class="vr p-0"></div>
+    <div class="col-1 text-center">24개월</div>
+    <div class="vr p-0"></div>
+    <div class="col-1 text-center">36개월</div>
+</div>
+<div v-if="bank_name=='전체' && select==true && store.deposit.length > 0" v-for="(deposit, index) in store.deposit" :key="index" style="display: block;">
+    <div class="row d-flex align-items-center" :class="{ 'gray-bg': index % 2 === 0, 'white-bg': index % 2 !== 0 }">
+        <div @click="goDetail(deposit)" class="col-2 text-center">{{ deposit.dcls_month }}</div>
+        <div @click="goDetail(deposit)" class="col-2 text-center">{{ deposit.kor_co_nm }}</div>
+        <div @click="goDetail(deposit)" class="col-3 text-center">{{ deposit.fin_prdt_nm }}</div>
+        <div @click="goDetail(deposit)" class="col-1 text-center">{{ deposit.month6 }}</div>
+        <div @click="goDetail(deposit)" class="col-1 text-center">{{ deposit.month12 }}</div>
+        <div @click="goDetail(deposit)" class="col-1 text-center">{{ deposit.month24 }}</div>
+        <div @click="goDetail(deposit)" class="col-1 text-center">{{ deposit.month36 }}</div>
+        <div class="col-1 text-center" style="margin-left: auto; margin-top: 0px;">
+            <button class="btn btn-primary"  @click="save(deposit)" v-if="!store.data_str.includes(deposit.fin_prdt_cd) && store.deposit.length > 0">저장</button>
+            <button class="btn btn-primary" @click="del(deposit)" v-else>삭제</button>
+        </div>
+    </div>
+</div>
+<div v-if="(bank_name=='전체' && select==false && store.savings.length > 0)" v-for="(item, index) in store.savings" :key="index" style="display: block;">
+    <div class="row d-flex align-items-center" :class="{ 'gray-bg': index % 2 === 0, 'white-bg': index % 2 !== 0 }">
+        <div @click="goDetail(item)" class="col-2 text-center">{{ item.dcls_month }}</div>
+        <div @click="goDetail(item)" class="col-2 text-center">{{ item.kor_co_nm }}</div>
+        <div @click="goDetail(item)" class="col-3 text-center">{{ item.fin_prdt_nm }}</div>
+        <div @click="goDetail(item)" class="col-1 text-center">{{ item.month6 }}</div>
+        <div @click="goDetail(item)" class="col-1 text-center">{{ item.month12 }}</div>
+        <div @click="goDetail(item)" class="col-1 text-center">{{ item.month24 }}</div>
+        <div @click="goDetail(item)" class="col-1 text-center">{{ item.month36 }}</div>
+        <div class="col-1 text-center" style="margin-left: auto; margin-top: 0px;">
+            <button class="btn btn-primary" @click="save(item)" v-if="!store.data_str.includes(item.fin_prdt_cd) && store.deposit.length > 0">저장</button>
+            <button class="btn btn-primary" @click="del(item)" v-else>삭제</button>
+        </div>
+    </div>
+</div>
                 <div v-if="bank_name!='전체' && select==true && store.deposit.length > 0" v-for="deposit in store.deposit">
                     <div v-if="deposit.kor_co_nm==bank_name && store.deposit.length > 0" @click="goDetail(deposit)">{{ deposit.dcls_month }}  {{ deposit.kor_co_nm }}  {{ deposit.fin_prdt_nm }} 
                         <div v-if="day==6">{{ deposit.month6 }}</div>
                         <div v-if="day==12">{{ deposit.month6 }} {{ deposit.month12 }}</div>
                         <div v-if="day==24">{{ deposit.month6 }} {{ deposit.month12 }} {{ deposit.month24 }}</div>
                         <div v-if="day==36">{{ deposit.month6 }} {{ deposit.month12 }} {{ deposit.month24 }} {{ deposit.month36 }}</div>
-                        <button class="btn btn-primary" @click="save(deposit)" v-if="!data_str.includes(deposit.fin_prdt_cd) && store.deposit.length > 0">저장</button>
+                        <button class="btn btn-primary" @click="save(deposit)" v-if="!store.data_str.includes(deposit.fin_prdt_cd) && store.deposit.length > 0">저장</button>
                         <button class="btn btn-primary" @click="del(deposit)" v-else>삭제</button>
                     </div>
                 </div>
@@ -79,16 +86,18 @@
                         <div v-if="day==36">{{ savings.month6 }} {{ savings.month12 }} {{ savings.month24 }} {{ savings.month36 }}</div>
                         <button class="btn btn-primary" @click="save(savings)" v-if="!data_str.includes(savings.fin_prdt_cd) && store.deposit.length > 0">저장</button>
                     <button class="btn btn-primary" @click="del(savings)" v-else>삭제</button>
-                </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    
+
     </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useCounterStore } from '../stores/counter'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
@@ -98,10 +107,11 @@ const select = ref(false)
 const router = useRouter()
 const days = ref(['전체', 6, 12, 24, 36])
 const day = ref('')
-const data = ref('')
-const data_str = ref([])
+
 const API_URL = 'http://127.0.0.1:8000'
-onMounted(() => { 
+
+
+onMounted(() => {
     store.getdeposit()
     store.getUserDetail()
     store.deposit.forEach((element) =>{
@@ -128,10 +138,8 @@ onMounted(() => {
         })
         .catch((err) => console.log(err))
     })
-    data.value = store.UserDetail.financial_products
-    if(!data.value==''){
-        data_str.value = data.value.split(',')
-    }
+
+
  })
 const dep = function() {
     select.value = true
@@ -150,13 +158,13 @@ const goDetail = function(target){
 }
 
 const save = function(object) {
-    data.value += object.fin_prdt_cd+','
-    data_str.value = data.value.split(',') 
+    store.data += object.fin_prdt_cd+','
+    store.data_str = store.data.split(',') 
     axios({
         method: 'post',
         url: `${API_URL}/accounts/update/${store.UserDetail.id}/`,
         data: {
-            financial_products:data.value
+            financial_products:store.data
         }
     })
     .then((res) => {
@@ -165,19 +173,19 @@ const save = function(object) {
     .catch((err) => {
         console.log(err)
     })
-    console.log(data_str.value)
+    console.log(store.data_str)
 }
 
 
 const del = function(object){
-    data_str.value = data_str.value.filter((element) => element != object.fin_prdt_cd)
-    data.value = data_str.value.join(',')
-    console.log(data.value)
+    store.data_str = store.data_str.filter((element) => element != object.fin_prdt_cd)
+    store.data = store.data_str.join(',')
+    console.log(store.data)
     axios({
         method: 'post',
         url: `${API_URL}/accounts/update/${store.UserDetail.id}/`,
         data: {
-            financial_products:data.value
+            financial_products:store.data
         }
     })
     .then((res) => {
@@ -235,5 +243,13 @@ const del = function(object){
 
 .btn-primary {
   margin-top: 5px;
+}
+
+.gray-bg {
+    background-color: #ccc; /* Gray background color */
+}
+
+.white-bg {
+    background-color: #fff; /* White background color */
 }
 </style>
