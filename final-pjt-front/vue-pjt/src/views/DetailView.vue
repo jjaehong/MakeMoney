@@ -92,6 +92,7 @@ const deleteArticle = function () {
   })
     .then((res) => {
       // console.log(res)
+      
       router.push({ name: 'community' })
     })
     .catch((err) => {
