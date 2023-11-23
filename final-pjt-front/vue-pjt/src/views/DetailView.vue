@@ -158,7 +158,7 @@ const likes = function () {
 
 </script>
 
-<style>
+<style scoped>
 .heart {
   color: red;
   /* background-color: red; */

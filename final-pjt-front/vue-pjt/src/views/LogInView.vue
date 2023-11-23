@@ -36,7 +36,7 @@ const logIn = function () {
 }
 </script>
 
-<style>
+<style scoped>
 
 .login {
   width: 500px;

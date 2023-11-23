@@ -40,9 +40,8 @@
         </div>
       </div>
     </div>
-    <div v-else class="fs-lg">
-      <br>
-      로그인이 필요합니다.
+    <div v-else class="loginplz">
+      로그인이 필요합니다!
     </div>
   </template>
   
@@ -82,5 +81,12 @@
   .audio-player {
     width: 100%;
     margin-top: 10px;
+  }
+
+  .loginplz{
+    margin: 20px;
+    font-size: xx-large;
+    font-weight: bold;
+
   }
   </style>

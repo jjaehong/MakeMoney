@@ -1,38 +1,40 @@
 <template>
     <div>
-        <div>{{ store.UserDetail.username }}님의 프로필 수정 페이지</div>
-        <form @submit.prevent="updateprofile(store.UserDetail)">
+        <br>
+        <h1>{{ store.UserDetail.username }}님의 프로필 수정 페이지</h1>
+        <br>
+        <form @submit.prevent="updateprofile(store.UserDetail)" >
             <div class="row" style="width: 500px;">
                 <div>
-                    <label for="nickname" class="col-3">nickname</label>
+                    <label for="nickname" class="col-3">닉네임</label>
                     <input type="text" :placeholder=store.UserDetail.nickname class="col-9" id="nickname" v-model="nickname">
                 </div>
                 <div>
-                    <label for="age" class="col-3">age</label>
+                    <label for="age" class="col-3">나이</label>
                     <input type="text" :placeholder=store.UserDetail.age class="col-9" id="age" v-model="age">
                 </div>
                 <div>
-                    <label for="email" class="col-3">email</label>
+                    <label for="email" class="col-3">이메일</label>
                     <input type="text" :placeholder=store.UserDetail.email class="col-9" id="email" v-model="email">
                 </div>
                 <div>
-                    <label for="money" class="col-3">money</label>
+                    <label for="money" class="col-3">자산 (만원)</label>
                     <input type="text" :placeholder=store.UserDetail.money class="col-9" id="money" v-model="money">
                 </div>
                 <div>
-                    <label for="salary" class="col-3">salary</label>
+                    <label for="salary" class="col-3">연봉 (만원)</label>
                     <input type="text" :placeholder=store.UserDetail.salary class="col-9" id="salary" v-model="salary">
                 </div>
                 <div>
-                    <label for="consumption" class="col-3">consumption</label>
+                    <label for="consumption" class="col-3">소비 금액 (연)</label>
                     <input type="text" :placeholder=store.UserDetail.consumption class="col-9" id="consumption" v-model="consumption">
                 </div>
                 <div>
-                    <label for="loan" class="col-3">loan_money</label>
+                    <label for="loan" class="col-3">대출금 (만원)</label>
                     <input type="text" :placeholder=store.UserDetail.loan_money class="col-9" id="loan" v-model="loan_money">
                 </div>
                 <div>
-                    <label for="goal_money" class="col-3">goal_money</label>
+                    <label for="goal_money" class="col-3">목표 금액 (만원)</label>
                     <input type="text" :placeholder=store.UserDetail.goal_money class="col-9" id="goal_money" v-model="goal_money">
                 </div>
                 <div>
@@ -97,5 +99,17 @@ onMounted(() => {
 </script>
 
 <style scoped>
+
+.row {
+    margin-left: 10%;
+    align-items: center;
+    gap: 10px;
+}
+
+h1 {
+  margin: auto auto;
+  text-align: center;
+}
+
 
 </style>
