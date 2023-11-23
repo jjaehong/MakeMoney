@@ -29,6 +29,7 @@ export const useCounterStore = defineStore('counter', () => {
   })
   const API_URL = 'http://127.0.0.1:8000'
 
+  // DRF에 예금 조회 요청
   const getdeposit = function () {
     axios({
       method: 'get',
@@ -54,6 +55,7 @@ export const useCounterStore = defineStore('counter', () => {
     .catch(err => console.log(err))
   }
 
+  // DRF에 환율 조회 요청
   const getexchange = function(){
     axios({
       method: 'get',
@@ -78,7 +80,6 @@ export const useCounterStore = defineStore('counter', () => {
       }
     })
       .then((res) =>{
-        // console.log(res)
         articles.value = res.data
       })
       .catch((err) => {
@@ -86,6 +87,7 @@ export const useCounterStore = defineStore('counter', () => {
       })
   }
 
+  // DRF에 댓글 조회 요청
   const getComments = function () {
     axios({
       method:'get',
@@ -95,7 +97,6 @@ export const useCounterStore = defineStore('counter', () => {
       }
     })
       .then((res) => {
-        console.log(res)
         comments.value = res.data
       })
       .catch((err) => {
@@ -103,6 +104,7 @@ export const useCounterStore = defineStore('counter', () => {
       })
   }
 
+  // 회원가입
   const signUp = function (payload) {
     const { username, password1, password2 } = payload
 
@@ -123,6 +125,7 @@ export const useCounterStore = defineStore('counter', () => {
       })
   }
 
+  // 로그인
   const logIn = function (payload) {
     const { username, password } = payload
 
@@ -143,6 +146,7 @@ export const useCounterStore = defineStore('counter', () => {
       })
   }
 
+  // 로그아웃
   const logOut = function () {
     axios({
       method: 'post',
@@ -157,6 +161,7 @@ export const useCounterStore = defineStore('counter', () => {
       })
   }
 
+  // user의 정보 요청
   const getUserDetail = function() {
     axios({
       method: 'get',
@@ -178,6 +183,7 @@ export const useCounterStore = defineStore('counter', () => {
     })
 
   }
+
 
 
   return { deposit, API_URL, getdeposit, bank, savings, total, getexchange, country, exchange, 

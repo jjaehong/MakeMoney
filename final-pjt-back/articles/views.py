@@ -91,6 +91,7 @@ def comment_create(request, article_id):
         serializer.save(article=article)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def likes(request,article_id):
