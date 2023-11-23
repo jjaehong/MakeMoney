@@ -1,6 +1,6 @@
 <template>
     <div class="financial-products">
-      <h1 class="mt-4">금융 상품 이력</h1>
+      <h1 class="mt-4 fw-bold">금융 상품 이력</h1>
       <div class="container mt-4">
         <div class="row">
           <div class="col-md-3">

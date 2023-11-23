@@ -40,7 +40,8 @@
         </div>
       </div>
     </div>
-    <div v-else>
+    <div v-else class="fs-lg">
+      <br>
       로그인이 필요합니다.
     </div>
   </template>

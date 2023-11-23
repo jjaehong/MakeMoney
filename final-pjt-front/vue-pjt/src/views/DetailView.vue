@@ -10,8 +10,8 @@
       <p>작성일 : {{ article.created_at }}</p>
       <p>수정일 : {{ article.updated_at }}</p>
       <div class="d-flex justify-content-between">
-        <i class="bi bi-arrow-through-heart-fill" :class="{ 'heart': islike }" @click="likes(store.UserDetail.username)">
-        </i>
+        <span class="bi bi-arrow-through-heart-fill h1 " :class="{ 'heart': islike }" @click="likes(store.UserDetail.username)">
+        </span>
         <button @click="deleteArticle()">삭제</button>
       </div>
     </div>
