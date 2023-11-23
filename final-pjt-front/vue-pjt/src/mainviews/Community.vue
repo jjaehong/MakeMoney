@@ -16,8 +16,12 @@
   
   const store = useCounterStore()
   
+  // console.log(store.UserDetail)
+
+
   onMounted(() => {
     store.getArticles()
+    store.getUserDetail()
   })
 
   
