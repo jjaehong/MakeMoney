@@ -19,7 +19,6 @@
           </div>
           <div class="col-md-9">
             <div style="margin-bottom: 10px;">
-
                 <button @click="dep" class="btn btn-secondary">정기예금</button>
                 <button @click="sav" class="btn btn-secondary">정기적금</button>
             </div>

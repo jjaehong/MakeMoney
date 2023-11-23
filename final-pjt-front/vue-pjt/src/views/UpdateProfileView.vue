@@ -24,12 +24,23 @@
                     <input type="text" :placeholder=store.UserDetail.salary class="col-9" id="salary" v-model="salary">
                 </div>
                 <div>
+                    <label for="consumption" class="col-3">consumption</label>
+                    <input type="text" :placeholder=store.UserDetail.consumption class="col-9" id="consumption" v-model="consumption">
+                </div>
+                <div>
                     <label for="loan" class="col-3">loan_money</label>
                     <input type="text" :placeholder=store.UserDetail.loan_money class="col-9" id="loan" v-model="loan_money">
                 </div>
-                <select name="" id="">
-
-                </select>
+                <div>
+                    <label for="goal_money" class="col-3">goal_money</label>
+                    <input type="text" :placeholder=store.UserDetail.goal_money class="col-9" id="goal_money" v-model="goal_money">
+                </div>
+                <div>
+                    <label for="days" class="col-3">목표개월 수를 선택해주세요.</label>
+                    <select name="days" class="col-9" id="days" v-model="goal_period">
+                        <option v-for="day in goal_period_str" :value="day">{{ day }}</option>
+                    </select>
+                </div>
                 <button class="btn btn-primary" style="width: 30%;">수정완료</button>
             </div>
         </form>
@@ -43,15 +54,16 @@ import { useCounterStore } from '../stores/counter'
 import axios from 'axios'
 const router = useRouter()
 const store = useCounterStore()
-const nickname = ref('')
-const email = ref('')
-const age = ref('')
-const money = ref('')
-const salary = ref('')
-const loan_money = ref('')
-const goal_period = ref('')
-const goal_money = ref('')
-const goal_money_str = ref(['1억원 미만, 1억원 이상 ~ 2억원 미만, 2억원 이상 ~ 3억원 미만, 3억원 이상 ~ 4억원 미만'])
+const nickname = ref(store.UserDetail.nickname);
+const email = ref(store.UserDetail.email);
+const age = ref(store.UserDetail.age);
+const money = ref(store.UserDetail.money);
+const salary = ref(store.UserDetail.salary);
+const consumption = ref(store.UserDetail.consumption);
+const loan_money = ref(store.UserDetail.loan_money);
+const goal_period = ref(store.UserDetail.goal_period);
+const goal_money = ref(store.UserDetail.goal_money);
+const goal_period_str = ref([6, 12, 24, 36])
 const API_URL = 'http://127.0.0.1:8000'
 
 const updateprofile = function(UserDetail) {
@@ -65,6 +77,7 @@ const updateprofile = function(UserDetail) {
             money: money.value,
             salary: salary.value,
             loan_money: loan_money.value,
+            consumption: consumption.value,
             goal_money: goal_money.value,
             goal_period: goal_period.value
         }
