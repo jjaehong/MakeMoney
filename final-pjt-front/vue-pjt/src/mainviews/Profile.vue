@@ -43,7 +43,7 @@
         
         <h2> 1. {{ store.UserDetail.username }} 님이 가입한 상품 목록 </h2>
         <div>
-            <div v-if="store.data" v-for="product in store.total">
+            <div v-if="store.data_str.length > 2" v-for="product in store.total">
                 <div v-if="store.data_str.includes(product.fin_prdt_cd)" class="financial-product">
                     <div @click="goDetail(product)">  {{ product.kor_co_nm }} : {{ product.fin_prdt_nm }}</div>
                     <!-- <div @click="goDetail(product)" >상품명 {{ product.fin_prdt_nm }}</div> -->
@@ -69,7 +69,10 @@
             {{ store.UserDetail.username }}님은 소비성향이 큽니다. 단기 금리가 높은 상품을 추천합니다.
         </h4>
         <br>
-        <div class="product-container">
+        <div>
+            <button @click.prevent="toggleRecommendations" style="width: 200px;" class="btn btn-primary">{{ showRecommendations ? '추천 상품 숨기기' : '추천 상품 보기' }}</button>
+        </div>
+        <div v-if="showRecommendations" class="product-container">
             <h3>추천금융상품 목록</h3>
             <div class="row d-flex align-items-center border border-1px-solid-#ccc m-2 ">
                 <div class="col-2 text-center">공시 제출월</div>
@@ -87,9 +90,6 @@
                 <div class="col-1 text-center">36개월</div>
             </div>
             <div v-for="(product, index) in recomment_conf" :key="index" class="border border-1px-solid-#ccc">
-                <div>
-                    
-                </div>
                 <div class="row d-flex align-items-center m-2"
                     :class="{ 'gray-bg': index % 2 === 0, 'white-bg': index % 2 !== 0 }">
                     <div @click="goDetail(product)" class="col-2 text-center">{{ product.dcls_month }}</div>
@@ -100,99 +100,47 @@
                     <div @click="goDetail(product)" class="col-1 text-center">{{ product.month24 }}</div>
                     <div class="col-1 text-center">{{ product.month36 }}</div>
                     <button @click="goDetail(product)" class="col-1">상세보기</button>
-                </div>
-                <div class="fw-bold m-2" v-if="recomment_day == 6 && product.type == '단리'">6개월 예상 수익 : {{
-                    (store.UserDetail.salary - store.UserDetail.consumption) / 12 * 6 * (1 + product.month6 / 100) * 0.5 }}</div>
-                <div>
-                    <div class="fw-bold m-2"
-                        v-if="recomment_day == 6 && product.type == '단리' && store.UserDetail.goal_money + store.UserDetail.loan_money - (store.UserDetail.salary - store.UserDetail.consumption) / 12 * 6 * (1 + product.month6 / 100) * 0.5 > 0">
-                        6개월 후 남은 목표금액(대출금 포함) : {{
-                            store.UserDetail.goal_money + store.UserDetail.loan_money - (store.UserDetail.salary - store.UserDetail.consumption) / 12 * 6 * (1 + product.month6 / 100) * 0.5
-                        }}</div>
-                    <div
-                        v-if="recomment_day == 6 && product.type == '단리' && store.UserDetail.goal_money + store.UserDetail.loan_money - (store.UserDetail.salary - store.UserDetail.consumption) / 12 * 6 * (1 + product.month6 / 100) * 0.5 <= 0">
-                        목표금액을 달성하였습니다!</div>
-                    <div v-if="recomment_day==6 && product.type=='단리'">6개월 예상 수익 : {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*6*(1+product.month6/100)*0.5)).toFixed(2)) }} 만원</div>
-                    <div>
+                    </div>
+                    <div class="fw-bold m-2" v-if="recomment_day==6 && product.type=='단리'">6개월 예상 수익 : {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*6*(1+product.month6/100)*0.5)).toFixed(2)) }} 만원</div>
+                    <div class="fw-bold m-2">
                         <div v-if="recomment_day==6 && product.type=='단리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*6*(1+product.month6/100)*0.5 > 0">6개월 후 남은 목표금액(대출금 포함) : {{ parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*6*(1+product.month6/100)*0.5)).toFixed(2)) }}만원</div>
                         <div v-if="recomment_day==6 && product.type=='단리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*6*(1+product.month6/100)*0.5 <= 0">목표금액을 달성하였습니다!</div>
                     </div>
-                    <div v-if="recomment_day==6 && product.type=='복리'">6개월 예상 수익 : {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*6*(((1+product.month6/100/12)^6-1)^6+1))).toFixed(2)) }}만원</div>
-                    <div>
+                    <div class="fw-bold m-2" v-if="recomment_day==6 && product.type=='복리'">6개월 예상 수익 : {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*6*(((1+product.month6/100/12)^6-1)^6+1))).toFixed(2)) }}만원</div>
+                    <div class="fw-bold m-2">
                         <div v-if="recomment_day==6 && product.type=='복리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*6*(((1+product.month6/100/12)^6-1)^6+1) > 0">6개월 후 남은 목표금액(대출금 포함) : {{ parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*6*(((1+product.month6/100/12)^6-1)^6+1))).toFixed(2)) }}만원</div>
                         <div v-if="recomment_day==6 && product.type=='복리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*6*(((1+product.month6/100/12)^6-1)^6+1) <= 0">목표 금액을 달성하였습니다!</div>
                     </div>
-                    <div v-if="recomment_day==12 && product.type=='단리'">12개월 예상 수익 : {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month12/100))).toFixed(2)) }}만원</div>
-                    <div>
 
+                    <div class="fw-bold m-2" v-if="recomment_day==12 && product.type=='단리'">12개월 예상 수익 : {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month12/100))).toFixed(2)) }}만원</div>
+                    <div class="fw-bold m-2">
                         <div v-if="recomment_day==12 && product.type=='단리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month12/100) > 0">12개월 후 남은 목표금액(대출금 포함) : {{ parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month12/100))).toFixed(2)) }}만원</div>
                         <div v-if="recomment_day==12 && product.type=='단리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month12/100) <= 0">목표금액을 달성하였습니다.</div>
                     </div>
-                    <div v-if="recomment_day==12 && product.type=='복리'">12개월 예상 수익 : {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+product.month12/100/12)^12-1)^12+1))).toFixed(2)) }}만원</div>
-                    <div>
 
+                    <div class="fw-bold m-2" v-if="recomment_day==12 && product.type=='복리'">12개월 예상 수익 : {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+product.month12/100/12)^12-1)^12+1))).toFixed(2)) }}만원</div>
+                    <div class="fw-bold m-2">
                         <div v-if="recomment_day==12 && product.type=='복리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+product.month12/100/12)^12-1)^12+1) > 0">12개월 후 남은 목표금액(대출금 포함) : {{parseFloat((( store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+product.month12/100/12)^12-1)^12+1))).toFixed(2)) }}만원</div>
                         <div v-if="recomment_day==12 && product.type=='복리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+product.month12/100/12)^12-1)^12+1) <= 0">목표 금액을 달성하였습니다!</div>
                     </div>
-                    <div v-if="recomment_day==24 && product.type=='단리'">24개월 예상 수익 : {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month24/100)*2)).toFixed(2)) }}만원</div>
-                    <div>
+
+                    <div class="fw-bold m-2" v-if="recomment_day==24 && product.type=='단리'">24개월 예상 수익 : {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month24/100)*2)).toFixed(2)) }}만원</div>
+                    <div class="fw-bold m-2">
                         <div v-if="recomment_day==24 && product.type=='단리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month24/100)*2 > 0">24개월 후 남은 목표금액(대출금 포함) :  {{ parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month24/100)*2)).toFixed(2)) }}만원</div>
                         <div v-if="recomment_day==24 && product.type=='단리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+product.month24/100)*2 <= 0">목표금액을 달성하였습니다!</div>
                     </div>
-                    <div v-if="recomment_day==24 && product.type=='복리'">24개월 예상 수익 :  {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+product.month24/100/12)^24-1)^24+1))).toFixed(2)) }} 만원</div>
-                    <div>
 
+                    <div class="fw-bold m-2" v-if="recomment_day==24 && product.type=='복리'">24개월 예상 수익 :  {{ parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+product.month24/100/12)^24-1)^24+1))).toFixed(2)) }} 만원</div>
+                    <div class="fw-bold m-2">
                         <div v-if="recomment_day==24 && product.type=='복리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+product.month24/100/12)^24-1)^24+1) > 0">24개월 후 남은 목표금액(대출금 포함) :  {{ parseFloat(((store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*24*(((1+product.month24/100/12)^24-1)^24+1))).toFixed(2)) }}만원</div>
                         <div v-if="recomment_day==24 && product.type=='복리' && store.UserDetail.goal_money+store.UserDetail.loan_money-(store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+product.month24/100/12)^24-1)^24+1) <= 0">목표금액을 달성하였습니다.</div>
                     </div>
-                </div>
-                </div>
-                <div v-if="recomment_day == 6 && product.type == '복리'">6개월 예상 수익 : {{
-                    (store.UserDetail.salary - store.UserDetail.consumption) / 12 * 6 * (((1 + product.month6 / 100 / 12) ^ 6 - 1) ^ 6 + 1) }}
-                </div>
-                <div>
-                    <div
-                        v-if="recomment_day == 6 && product.type == '복리' && store.UserDetail.goal_money + store.UserDetail.loan_money - (store.UserDetail.salary - store.UserDetail.consumption) / 12 * 6 * (((1 + product.month6 / 100 / 12) ^ 6 - 1) ^ 6 + 1) > 0">
-                        6개월 후 남은 목표금액(대출금 포함) : {{
-                            store.UserDetail.goal_money + store.UserDetail.loan_money - (store.UserDetail.salary - store.UserDetail.consumption) / 12 * 6 * (((1 + product.month6 / 100 / 12) ^ 6 - 1) ^ 6 + 1)
-                        }}</div>
-                    <div
-                        v-if="recomment_day == 6 && product.type == '복리' && store.UserDetail.goal_money + store.UserDetail.loan_money - (store.UserDetail.salary - store.UserDetail.consumption) / 12 * 6 * (((1 + product.month6 / 100 / 12) ^ 6 - 1) ^ 6 + 1) <= 0">
-                        목표 금액을 달성하였습니다!</div>
-                </div>
-                <div v-if="recomment_day == 12 && product.type == '단리'">12개월 예상 수익 : {{
-                    (store.UserDetail.salary - store.UserDetail.consumption) / 12 * 12 * (1 + product.month12 / 100) }}</div>
-                <div>
-
-                    <div
-                        v-if="recomment_day == 12 && product.type == '단리' && store.UserDetail.goal_money + store.UserDetail.loan_money - (store.UserDetail.salary - store.UserDetail.consumption) / 12 * 12 * (1 + product.month12 / 100) > 0">
-                        12개월 후 남은 목표금액(대출금 포함) : {{
-                            store.UserDetail.goal_money + store.UserDetail.loan_money - (store.UserDetail.salary - store.UserDetail.consumption) / 12 * 12 * (1 + product.month12 / 100)
-                        }}</div>
-                    <div
-                        v-if="recomment_day == 12 && product.type == '단리' && store.UserDetail.goal_money + store.UserDetail.loan_money - (store.UserDetail.salary - store.UserDetail.consumption) / 12 * 12 * (1 + product.month12 / 100) <= 0">
-                        목표금액을 달성하였습니다.</div>
-                </div>
-                <div v-if="recomment_day == 12 && product.type == '복리'">12개월 예상 수익 : {{
-                    (store.UserDetail.salary - store.UserDetail.consumption) / 12 * 12 * (((1 + product.month12 / 100 / 12) ^ 12 - 1) ^ 12 + 1) }}
-                </div>
-                <div v-if="recomment_day == 12 && product.type == '복리'">12개월 후 남은 목표금액(대출금 포함) : {{
-                    store.UserDetail.goal_money + store.UserDetail.loan_money - (store.UserDetail.salary - store.UserDetail.consumption) / 12 * 12 * (((1 + product.month12 / 100 / 12) ^ 12 - 1) ^ 12 + 1)
-                }}</div>
-                <div v-if="recomment_day == 24 && product.type == '단리'">24개월 예상 수익 : {{
-                    (store.UserDetail.salary - store.UserDetail.consumption) / 12 * 24 * (1 + product.month24 / 100) * 2 }}</div>
-                <div v-if="recomment_day == 24 && product.type == '단리'">12개월 후 남은 목표금액(대출금 포함) : {{
-                    store.UserDetail.goal_money + store.UserDetail.loan_money - (store.UserDetail.salary - store.UserDetail.consumption) / 12 * 24 * (1 + product.month24 / 100) * 2
-                }}</div>
-                <div v-if="recomment_day == 24 && product.type == '복리'">24개월 예상 수익 : {{
-                    (store.UserDetail.salary - store.UserDetail.consumption) / 12 * 24 * (((1 + product.month24 / 100 / 12) ^ 24 - 1) ^ 24 + 1) }}
-                </div>
-                <div v-if="recomment_day == 24 && product.type == '복리'">12개월 후 남은 목표금액(대출금 포함) : {{
-                    store.UserDetail.goal_money + store.UserDetail.loan_money - (store.UserDetail.salary - store.UserDetail.consumption) / 12 * 24 * (((1 + product.month24 / 100 / 12) ^ 24 - 1) ^ 24 + 1)
-                }}</div>
             </div>
-        </div>
-    </div>
+            </div>
+            </div>
+            <button @click.prevent="showgraph" style="width: 200px;" class="btn btn-primary">{{ show ? '그래프 숨기기' : '그래프 보기' }}</button>
+            <chart v-if="show" :name="name" :data1="data1" :data2="data2" :day="recomment_day"/>
+
 </template>
 
 <script setup>
@@ -200,16 +148,22 @@ import { onMounted, ref } from 'vue'
 import { useCounterStore } from '../stores/counter'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+import chart from '../components/chart.vue'
 const router = useRouter()
 const store = useCounterStore()
 const best_period = ref('')
 const best_conf = ref('')
 const recomment_conf = ref('')
 const recomment_day = ref('')
+const data1 = ref([])
+const data2 = ref([])
+const name = ref([])
+const show = ref(false)
 const API_URL = 'http://127.0.0.1:8000'
 onMounted(() => {
     store.getUserDetail()
     store.getdeposit()
+    console.log(store.data_str.length)
     store.savings.forEach((element) => {
         axios({
             method: 'get',
@@ -220,6 +174,7 @@ onMounted(() => {
                     element['month' + i.save_trm] = i.intr_rate
                     element[i.save_trm] = i.intr_rate
                     element['type'] = i.intr_rate_type_nm
+                    element['bestmonth'+i.save_trm] = i.intr_rate2
                 }
             })
             .catch((err) => console.log(err))
@@ -248,7 +203,7 @@ onMounted(() => {
             .slice(0, 5)
     }
     console.log(recomment_conf.value)
-
+    console.log(recomment_day.value)
 })
 
 const goDetail = function(target){
@@ -277,15 +232,54 @@ const del = function (object) {
         })
 }
 
-const goDetail = function(target){
-    router.push({name:'productsdetail', params:{cd:target.fin_prdt_cd}})
-}
 
 const showRecommendations = ref(false);
 
 const toggleRecommendations = () => {
   showRecommendations.value = !showRecommendations.value;
 };
+
+const showgraph = () => {
+    show.value = !show.value
+    name.value = []
+    data1.value = []
+    data2.value = []
+    for(let i of recomment_conf.value){
+    
+        name.value.push(i.fin_prdt_nm)
+        if(0.2 <= store.UserDetail.consumption / store.UserDetail.salary && store.UserDetail.consumption / store.UserDetail.salary < 0.4){
+        
+            if(i.type=='단리'){
+        data1.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+i.month24/100)*2)).toFixed(2)))
+        data2.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+i.bestmonth24/100)*2)).toFixed(2)))
+            }
+            else if(i.type=='복리'){
+        data1.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+i.month24/100/12)^24-1)^24+1))).toFixed(2)))
+        data2.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+i.bestmonth24/100/12)^24-1)^24+1))).toFixed(2)))
+            }
+        }
+        else if (0.4 <= store.UserDetail.consumption / store.UserDetail.salary && store.UserDetail.consumption / store.UserDetail.salary < 0.6) {
+            if(i.type=='단리'){
+        data1.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+i.month12/100))).toFixed(2)))
+        data2.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(1+i.bestmonth12/100))).toFixed(2)))
+            }
+            else if(i.type=='복리'){
+        data1.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+i.month12/100/12)^12-1)^12+1))).toFixed(2)))
+        data2.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*12*(((1+i.month12/100/12)^12-1)^12+1))).toFixed(2)))
+            }
+        }
+        else if (0.6 <= store.UserDetail.consumption / store.UserDetail.salary) {
+            if(i.type=='단리'){
+        data1.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*6*(1+i.month6/100)*0.5)).toFixed(2)))
+        data2.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*6*(1+i.bestmonth6/100)*0.5)).toFixed(2)))
+            }
+            else if(i.type=='복리'){
+        data1.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*6*(((1+i.month6/100/12)^6-1)^6+1))).toFixed(2)))
+        data2.value.push(parseFloat((((store.UserDetail.salary-store.UserDetail.consumption)/12*6*(((1+i.bestmonth6/100/12)^6-1)^6+1))).toFixed(2)))
+            }
+        }
+    }
+}
 </script>
 
 <style scoped>

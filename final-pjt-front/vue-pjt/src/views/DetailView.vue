@@ -43,8 +43,7 @@ import { onMounted, onUpdated, ref, computed, watch } from 'vue'
 import { useCounterStore } from '@/stores/counter'
 import { useRoute, useRouter } from 'vue-router'
 import { RouterLink, RouterView } from 'vue-router'
-// import CommentList from '@/components/CommentList.vue'
-import Likes from '@/components/Likes.vue'
+
 
 
 const store = useCounterStore()
