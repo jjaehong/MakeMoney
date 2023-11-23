@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container">
         <h1>환율 계산기</h1>
         <div class="text-center" style="width: 80%;">
         <div class="input-group">
@@ -50,4 +50,10 @@ const ec = function(){
 </script>
 
 <style scoped>
+.container {
+    margin: 20px;
+    display: grid;
+    gap: 20px;
+}
+
 </style>

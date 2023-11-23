@@ -32,12 +32,15 @@
             <h5 class="card-title">프로필</h5>
           </div>
         </RouterLink>
-        <div class="card" style="width: 18rem;">
-          <img class="card-img-top" src="../그림/네이버증권.png" alt="Card image cap">
+        <a href="https://m.stock.naver.com/">
+          <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="../그림/네이버증권.png" alt="Card image cap">
           <div class="card-body">
             <h5 class="card-title">네이버 증권</h5>
           </div>
         </div>
+          
+        </a>
       </div>
     </div>
     <div v-else class="loginplz">

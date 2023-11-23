@@ -1,20 +1,22 @@
 <template>
-    <h1>은행 지도</h1>
-    <div class="map_wrap">
-      <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
-      <div id="menu_wrap" class="bg_white">
-        <div class="option">
-          <div>
-            <form @submit.prevent="initMap()">
-              키워드 : <input type="text" value="은행" id="keyword" size="15">
-              <button type="submit">검색하기</button>
-            </form>
+    <div class="doc">
+        <h1>은행 지도</h1>
+        <div class="map_wrap">
+          <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+          <div id="menu_wrap" class="bg_white">
+            <div class="option">
+              <div>
+                <form @submit.prevent="initMap()">
+                  키워드 : <input type="text" value="은행" id="keyword" size="15">
+                  <button type="submit">검색하기</button>
+                </form>
+              </div>
+            </div>
+            <hr>
+            <ul id="placesList"></ul>
+            <div id="pagination"></div>
           </div>
         </div>
-        <hr>
-        <ul id="placesList"></ul>
-        <div id="pagination"></div>
-      </div>
     </div>
   </template>
   
@@ -263,6 +265,11 @@ function removeAllChildNods(el) {
 </script>
 
 <style scoped>
+.doc {
+    margin: 20px;
+}
+
+
 .map_wrap,
 .map_wrap * {
     margin: 0;

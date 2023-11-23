@@ -192,7 +192,6 @@
                 }}</div>
             </div>
         </div>
-    </div>
 </template>
 
 <script setup>
@@ -250,10 +249,6 @@ onMounted(() => {
     console.log(recomment_conf.value)
 
 })
-
-const goDetail = function(target){
-    router.push({name:'productsdetail', params:{cd:target.fin_prdt_cd}})
-}
 
 const goprofile = function (UserDetail) {
     router.push({ name: 'updateprofile', params: { username: UserDetail.username } })

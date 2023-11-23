@@ -12,13 +12,13 @@
       <div class="d-flex justify-content-between">
         <span class="bi bi-arrow-through-heart-fill h1 " :class="{ 'heart': islike }" @click="likes(store.UserDetail.username)">
         </span>
-        <button @click="deleteArticle()">삭제</button>
+        <button @click="deleteArticle(article)">게시글 삭제</button>
       </div>
     </div>
     <hr>
-    <h4>댓글 작성란</h4>
+    <h3>댓글 작성란</h3>
     <form @submit="createComment">
-      <input type="text" v-model="content">
+      <input type="text" class="w-75" v-model="content">
       <input type="submit" value="댓글 작성">
     </form>
     <hr>
@@ -30,7 +30,10 @@
             <div> 작성자 : {{ comment.user.username }} </div>
             <div> {{ comment.updated_at }} </div>
           </div>
-          <h4> {{ comment.content }} </h4>
+          <div class="d-flex justify-content-between">
+            <h5 class="w-75"> {{ comment.content }} </h5>
+            <button @click.prevent="deleteComment(comment.id)">댓글 삭제</button>
+          </div>
         </div>
       </div>
     </div>
@@ -43,8 +46,6 @@ import { onMounted, onUpdated, ref, computed, watch } from 'vue'
 import { useCounterStore } from '@/stores/counter'
 import { useRoute, useRouter } from 'vue-router'
 import { RouterLink, RouterView } from 'vue-router'
-// import CommentList from '@/components/CommentList.vue'
-import Likes from '@/components/Likes.vue'
 
 
 const store = useCounterStore()
@@ -54,7 +55,7 @@ const route = useRoute()
 const router = useRouter()
 const article = ref(null)
 const content = ref(null)
-
+const comment = ref(null)
 
 // watch(dfdf, (new, old) => {
 //   if (new !==old ) {
@@ -62,8 +63,8 @@ const content = ref(null)
 //   }
 // })
 const islike = computed(() => {
-  console.log(store.UserDetail.id)
-  console.log(article.value.like_users)
+  // console.log(store.UserDetail.id)
+  // console.log(article.value.like_users)
   return article.value.like_users.includes(store.UserDetail.id)
 
 })
@@ -85,19 +86,38 @@ onMounted(() => {
     })
 })
 
+const deleteArticle = function (article) {
 
-const deleteArticle = function () {
+    axios({
+      method: 'delete',
+      url: `${store.API_URL}/api/v1/articles/${article.id}/`
+    })
+      .then((res) => {
+        // console.log(res)
+        
+        router.push({ name: 'community' })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+
+
+const deleteComment = function (id) {
   axios({
-    method: 'delete',
-    url: `${store.API_URL}/api/v1/articles/${route.params.id}`
+    method:'delete',
+    url:`${store.API_URL}/api/v1/articles/comments/${id}`,
+    data:{
+      comment:id.value,
+    }
   })
-    .then((res) => {
-      // console.log(res)
-      router.push({ name: 'community' })
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+  .then((res) => {
+    console.log(res.data)
+  })
+  .catch(() => {
+    console.log(err)
+  })
 }
 
 const createComment = function (event) {
