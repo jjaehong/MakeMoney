@@ -38,7 +38,7 @@
                     <input type="text" :placeholder=store.UserDetail.goal_money class="col-9" id="goal_money" v-model="goal_money">
                 </div>
                 <div>
-                    <label for="days" class="col-3">목표개월 수를 선택해주세요.</label>
+                    <label for="days" class="col-3">목표개월 수</label>
                     <select name="days" class="col-9" id="days" v-model="goal_period">
                         <option v-for="day in goal_period_str" :value="day">{{ day }}</option>
                     </select>
