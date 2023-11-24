@@ -27,15 +27,17 @@
 import { onMounted, ref, computed, defineProps } from 'vue';
 import { useCounterStore } from '@/stores/counter';
 import { RouterLink } from 'vue-router';
+import axios from 'axios';
 
 const store = useCounterStore();
 
 // Ensure the computed property is accessible in the template
-const computedName1 = computed(() => store.uu.username);
+const computedName1 = ref(store.uu.username);
 
 onMounted(() => {
   store.getArticles();
   store.getUserDetail();
+  axios()
 });
 </script>
 
