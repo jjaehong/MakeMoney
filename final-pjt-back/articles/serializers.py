@@ -17,7 +17,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     # override
     article = ArticleSerializer(read_only=True)
-    user = UserSerializer(source='article.user', read_only=True)
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Comment

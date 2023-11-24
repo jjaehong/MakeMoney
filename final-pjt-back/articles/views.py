@@ -1,13 +1,12 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 
 from django.shortcuts import get_object_or_404, get_list_or_404
 
-from .serializers import ArticleListSerializer, ArticleSerializer, CommentSerializer
+from .serializers import ArticleListSerializer, ArticleSerializer, CommentSerializer, UserSerializer
 from .models import Article, Comment
 
 
@@ -60,17 +59,17 @@ def comment_list(request):
     # comments = Comment.objects.all()
     comments = get_list_or_404(Comment)
     serializer = CommentSerializer(comments, many=True)
+    print(serializer.data)
     return Response(serializer.data)
 
 
 @api_view(['GET', 'DELETE', 'PUT'])
 def comment_detail(request, comment_pk):
-    # comment = Comment.objects.get(pk=comment_pk)
     comment = get_object_or_404(Comment, pk=comment_pk)
     if request.method == 'GET':
         serializer = CommentSerializer(comment)
         return Response(serializer.data)
-    
+
     elif request.method == 'DELETE':
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -84,11 +83,11 @@ def comment_detail(request, comment_pk):
 
 @api_view(['POST'])
 def comment_create(request, article_id):
-    # article = Article.objects.get(id=article_id)
     article = get_object_or_404(Article, id=article_id)
     serializer = CommentSerializer(data=request.data)
+    print(request.user)
     if serializer.is_valid(raise_exception=True):
-        serializer.save(article=article)
+        serializer.save(article=article, user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 

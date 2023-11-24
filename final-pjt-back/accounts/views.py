@@ -14,3 +14,9 @@ def update(request, user_pk):
     if serializer.is_valid(raise_exception=True):
         serializer.save()
         return Response(serializer.data)
+    
+@api_view(['get'])
+def user(request, user_pk):
+    user = get_object_or_404(User, pk=user_pk)
+    serializer = UserSerializer(user, partial=True)
+    return Response(serializer.data)

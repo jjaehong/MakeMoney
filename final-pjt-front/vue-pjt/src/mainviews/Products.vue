@@ -67,26 +67,48 @@
         </div>
     </div>
 </div>
-                <div v-if="bank_name!='전체' && select==true && store.deposit.length > 0" v-for="deposit in store.deposit">
-                    <div v-if="deposit.kor_co_nm==bank_name && store.deposit.length > 0" @click="goDetail(deposit)">{{ deposit.dcls_month }}  {{ deposit.kor_co_nm }}  {{ deposit.fin_prdt_nm }} 
-                        <div v-if="day==6">{{ deposit.month6 }}</div>
-                        <div v-if="day==12">{{ deposit.month6 }} {{ deposit.month12 }}</div>
-                        <div v-if="day==24">{{ deposit.month6 }} {{ deposit.month12 }} {{ deposit.month24 }}</div>
-                        <div v-if="day==36">{{ deposit.month6 }} {{ deposit.month12 }} {{ deposit.month24 }} {{ deposit.month36 }}</div>
-                        <button class="btn btn-primary" @click="save(deposit)" v-if="!store.data_str.includes(deposit.fin_prdt_cd) && store.deposit.length > 0">저장</button>
-                        <button class="btn btn-primary" @click="del(deposit)" v-else>삭제</button>
-                    </div>
-                </div>
-                <div v-if="bank_name!='전체' && select==false && store.savings.length > 0" v-for="savings in store.savings">
-                    <div v-if="savings.kor_co_nm==bank_name && store.savings.length > 0" @click="goDetail(savings)">{{ savings.dcls_month }}  {{ savings.kor_co_nm }}  {{ savings.fin_prdt_nm }}
-                        <div v-if="day==6">{{ savings.month6 }}</div>
-                        <div v-if="day==12">{{ savings.month6 }} {{ savings.month12 }}</div>
-                        <div v-if="day==24">{{ savings.month6 }} {{ savings.month12 }} {{ savings.month24 }}</div>
-                        <div v-if="day==36">{{ savings.month6 }} {{ savings.month12 }} {{ savings.month24 }} {{ savings.month36 }}</div>
-                        <button class="btn btn-primary" @click="save(savings)" v-if="!data_str.includes(savings.fin_prdt_cd) && store.deposit.length > 0">저장</button>
-                    <button class="btn btn-primary" @click="del(savings)" v-else>삭제</button>
-                    </div>
-                </div>
+<div v-if="bank_name!='전체' && select==true && store.deposit.length > 0" v-for="(deposit, index) in store.deposit" :key="index" style="display: block;">
+    <div v-if="deposit.kor_co_nm==bank_name && store.deposit.length > 0" class="row d-flex align-items-center" :class="{ 'gray-bg': index % 2 === 0, 'white-bg': index % 2 !== 0 }">
+        <div class="col-2 text-center" @click="goDetail(deposit)">{{ deposit.dcls_month }}</div>
+        <div class="col-2 text-center" @click="goDetail(deposit)">{{ deposit.kor_co_nm }}</div>
+        <div class="col-3 text-center" @click="goDetail(deposit)">{{ deposit.fin_prdt_nm }}</div>
+        <div v-if="day==6" class="col-1 text-center" @click="goDetail(deposit)">{{ deposit.month6 }}</div>
+        <div v-if="day==12" class="col-1 text-center" @click="goDetail(deposit)">{{ deposit.month6 }}</div>
+        <div v-if="day==12" class="col-1 text-center" @click="goDetail(deposit)">{{ deposit.month12 }}</div>
+        <div v-if="day==24" class="col-1 text-center" @click="goDetail(deposit)">{{ deposit.month6 }}</div>
+        <div v-if="day==24" class="col-1 text-center" @click="goDetail(deposit)">{{ deposit.month12 }}</div>
+        <div v-if="day==24" class="col-1 text-center" @click="goDetail(deposit)">{{ deposit.month24 }}</div>
+        <div v-if="day==36" class="col-1 text-center" @click="goDetail(deposit)">{{ deposit.month6 }}</div>
+        <div v-if="day==36" class="col-1 text-center" @click="goDetail(deposit)">{{ deposit.month12 }}</div>
+        <div v-if="day==36" class="col-1 text-center" @click="goDetail(deposit)">{{ deposit.month24 }}</div>
+        <div v-if="day==36" class="col-1 text-center" @click="goDetail(deposit)">{{ deposit.month36 }}</div>
+        <div class="col-1 text-center" style="margin-left: auto; margin-top: 0px;">
+            <button class="btn btn-primary" @click="save(deposit)" v-if="!store.data_str.includes(deposit.fin_prdt_cd) && store.deposit.length > 0">저장</button>
+            <button class="btn btn-primary" @click="del(deposit)" v-else>삭제</button>
+        </div>
+    </div>
+</div>
+<div v-if="bank_name !== '전체' && select === false && store.savings.length > 0" v-for="(savings, index) in store.savings" :key="index" style="display: block;">
+    <div v-if="savings.kor_co_nm === bank_name && store.savings.length > 0" class="row d-flex align-items-center" :class="{ 'gray-bg': index % 2 === 0, 'white-bg': index % 2 !== 0 }">
+        <div @click="goDetail(savings)" class="col-2 text-center">{{ savings.dcls_month }}</div>
+        <div @click="goDetail(savings)" class="col-2 text-center">{{ savings.kor_co_nm }}</div>
+        <div @click="goDetail(savings)" class="col-3 text-center">{{ savings.fin_prdt_nm }}</div>
+        <div v-if="day == 6" @click="goDetail(savings)" class="col-1 text-center">{{ savings.month6 }}</div>
+        <div v-if="day == 12" @click="goDetail(savings)" class="col-1 text-center">{{ savings.month6 }}</div>
+        <div v-if="day == 12" @click="goDetail(savings)" class="col-1 text-center">{{ savings.month12 }}</div>
+        <div v-if="day == 24" @click="goDetail(savings)" class="col-1 text-center">{{ savings.month6 }}</div>
+        <div v-if="day == 24" @click="goDetail(savings)" class="col-1 text-center">{{ savings.month12 }}</div>
+        <div v-if="day == 24" @click="goDetail(savings)" class="col-1 text-center">{{ savings.month24 }}</div>
+        <div v-if="day == 36" @click="goDetail(savings)" class="col-1 text-center">{{ savings.month6 }}</div>
+        <div v-if="day == 36" @click="goDetail(savings)" class="col-1 text-center">{{ savings.month12 }}</div>
+        <div v-if="day == 36" @click="goDetail(savings)" class="col-1 text-center">{{ savings.month24 }}</div>
+        <div v-if="day == 36" @click="goDetail(savings)" class="col-1 text-center">{{ savings.month36 }}</div>
+        <div class="col-1 text-center" style="margin-left: auto; margin-top: 0px;">
+            <button class="btn btn-primary" @click="save(savings)" v-if="!store.data_str.includes(savings.fin_prdt_cd) && store.deposit.length > 0">저장</button>
+            <button class="btn btn-primary" @click="del(savings)" v-else>삭제</button>
+        </div>
+    </div>
+</div>
             </div>
         </div>
     </div>

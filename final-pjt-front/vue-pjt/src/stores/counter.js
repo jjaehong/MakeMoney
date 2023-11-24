@@ -19,6 +19,7 @@ export const useCounterStore = defineStore('counter', () => {
   const data_str = ref([])
   const getuser = ref([])
   const best_period = ref('')
+  const uu = ref('')
   // const cost = ref('')
   // const period = ref('')
   const isLogin = computed(() => {
@@ -93,9 +94,6 @@ export const useCounterStore = defineStore('counter', () => {
     axios({
       method:'get',
       url:`${API_URL}/api/v1/articles/comments/`,
-      headers: {
-        Authorization: `Token ${token.value}`
-      }
     })
       .then((res) => {
         console.log(res.data)
@@ -185,8 +183,21 @@ export const useCounterStore = defineStore('counter', () => {
     })
   }
 
+  const user = function(n){
+    axios({
+      method: 'get',
+      url: `${API_URL}/accounts/${n}`
+    })
+    .then((res) =>{
+      uu.value = res.data
+      console.log(uu.value)
+  })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
 
 
   return { deposit, API_URL, getdeposit, bank, savings, total, getexchange, country, exchange, 
-    articles, getArticles, signUp, logIn, token, isLogin, logOut, getUserDetail, UserDetail, getComments, comments, data, data_str, best_period }
+    articles, getArticles, signUp, logIn, token, isLogin, logOut, getUserDetail, UserDetail, getComments, comments, data, data_str, best_period, user, uu }
 }, { persist: true})

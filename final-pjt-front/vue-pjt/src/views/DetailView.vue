@@ -48,6 +48,7 @@ import { onMounted, onUpdated, ref, computed, watch } from 'vue'
 import { useCounterStore } from '@/stores/counter'
 import { useRoute, useRouter } from 'vue-router'
 import { RouterLink, RouterView } from 'vue-router'
+import { storeToRefs } from 'pinia'
 
 
 
@@ -80,13 +81,15 @@ onMounted(() => {
     url: `${store.API_URL}/api/v1/articles/${route.params.id}/`
   })
     .then((res) => {
-      // console.log(res.data)
+      console.log(res.data)
       article.value = res.data
       // console.log(route)
     })
     .catch((err) => {
       console.log(err)
     })
+    console.log(article.value)
+
 })
 
 const deleteArticle = function (id) {
@@ -103,6 +106,7 @@ const deleteArticle = function (id) {
       .catch((err) => {
         console.log(err)
       })
+
   }
 
 
@@ -115,7 +119,6 @@ const deleteComment = function (id) {
     // }
   })
   .then((res) => {
-    console.log(res.data)
     // 중괄호를 써주면 return이 따로 없음
     store.comments = store.comments.filter((comment) => comment.id !== id)
   })
@@ -123,9 +126,7 @@ const deleteComment = function (id) {
     console.log(err)
   })
     .then((res) => {
-      // console.log(res)
       
-      router.push({ name: 'community' })
     })
     .catch((err) => {
       console.log(err)
