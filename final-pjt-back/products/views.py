@@ -35,6 +35,8 @@ def save_deposit_products(request):
     deposit_url = f'http://finlife.fss.or.kr/finlifeapi/depositProductsSearch.json?auth={PRODUCT_API_KEY}&topFinGrpNo=020000&pageNo=1'
     response = requests.get(deposit_url).json()
 
+    print(response)
+
     for li in response.get("result").get('baseList'):
         print(li)
         data_baseList={

@@ -178,5 +178,34 @@
 
 
 
+#### 5. 서비스 실행 방법
+
+[BE]
+1. 가상환경 설정과 필요한 프로그램을 설치합니다.
+- python -m venv venv
+- source venv/Script/activate
+- microsoft visual studio installer 설치
+    - https://visualstudio.microsoft.com/ko/visual-cpp-build-tools/
+- python.exe -m pip install --upgrade pip
+- pip install -r requirements.txt
+- sqlite 설치 및 환경변수 경로 설정
+- 금융감독원 api key 만료됐는지 확인
 
 
+
+2. 서버 실행 전 필요한 데이터를 받습니다.
+- python manage.py makemigrations
+- python manage.py migrate
+- python manage.py loaddata datas.json
+
+3. 백엔드 서버를 실행합니다.
+- python manage.py runserver
+
+
+
+[FE]
+- ls 명령어 사용
+cd final-pjt-front
+cd vue-pjt
+npm install 
+npm run dev
